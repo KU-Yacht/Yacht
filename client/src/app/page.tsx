@@ -7,7 +7,7 @@ export default function Home() {
     <div className="p-10 flex justify-center items-center flex-1 flex-col gap-20">
       <HeroImage />
       <div className="flex flex-col md:flex-row gap-6 items-center">
-        <div className="text-xl w-[600px]">
+        <div className="text-xl max-w-[600px]">
           <span className="font-extrabold">Yacht </span>
           <span className="text-gray-500">
             is a Kubernetes Build, Deployment, and Operations Automation
