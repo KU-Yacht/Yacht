@@ -4,10 +4,10 @@ import { Handshake, Rocket, Wrench } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="p-10 flex justify-center items-center flex-1 flex-col gap-20">
+    <div className="flex flex-1 flex-col items-center justify-center gap-20 p-10">
       <HeroImage />
-      <div className="flex flex-col md:flex-row gap-6 items-center">
-        <div className="text-xl max-w-[600px]">
+      <div className="flex flex-col items-center gap-6 md:flex-row">
+        <div className="max-w-[600px] text-xl">
           <span className="font-extrabold">Yacht </span>
           <span className="text-gray-500">
             is a Kubernetes Build, Deployment, and Operations Automation
@@ -20,9 +20,9 @@ export default function Home() {
           <Button variant="secondary">Learn More</Button>
         </div>
       </div>
-      <div className="flex flex-col md:flex-row gap-8 items-center w-full justify-center">
-        <div className="flex flex-col gap-4 border rounded-lg w-full max-w-[442px] h-[194px] p-6">
-          <div className="flex gap-4 items-center">
+      <div className="flex w-full flex-col items-center justify-center gap-8 md:flex-row">
+        <div className="flex h-[194px] w-full max-w-[442px] flex-col gap-4 rounded-lg border p-6">
+          <div className="flex items-center gap-4">
             <Wrench />
             <h1 className="text-2xl font-semibold">Build</h1>
           </div>
@@ -32,8 +32,8 @@ export default function Home() {
             application.
           </p>
         </div>
-        <div className="flex flex-col gap-4 border rounded-lg w-full max-w-[442px] h-[194px] p-6">
-          <div className="flex gap-4 items-center">
+        <div className="flex h-[194px] w-full max-w-[442px] flex-col gap-4 rounded-lg border p-6">
+          <div className="flex items-center gap-4">
             <Rocket />
             <h1 className="text-2xl font-semibold">Deploy</h1>
           </div>
@@ -43,8 +43,8 @@ export default function Home() {
             different environments.
           </p>
         </div>
-        <div className="flex flex-col gap-4 border rounded-lg w-full max-w-[442px] h-[194px] p-6">
-          <div className="flex gap-4 items-center">
+        <div className="flex h-[194px] w-full max-w-[442px] flex-col gap-4 rounded-lg border p-6">
+          <div className="flex items-center gap-4">
             <Handshake />
             <h1 className="text-2xl font-semibold">Operation</h1>
           </div>
