@@ -3,7 +3,6 @@ package site.yacht.backend.global.security;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import site.yacht.backend.domain.user.domain.Role;
 import site.yacht.backend.domain.user.domain.User;
 
 import java.util.Collection;
@@ -13,8 +12,7 @@ public record UserDetailsImpl(User user) implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Role role = user.getRole();
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority(""));
     }
 
     @Override

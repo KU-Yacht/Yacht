@@ -19,19 +19,15 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false, unique = true)
-    private String nickname;
-
     @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role;
+    @Column(nullable = false, unique = true)
+    private String nickname;
 
-    public User(String email, String nickname, Role role) {
+    public User(String email, String password, String nickname) {
         this.email = email;
+        this.password = password;
         this.nickname = nickname;
-        this.role = role;
     }
 }

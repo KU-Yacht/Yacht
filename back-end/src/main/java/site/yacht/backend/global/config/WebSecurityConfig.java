@@ -38,6 +38,8 @@ public class WebSecurityConfig {
                         .requestMatchers(
                                 PathRequest.toH2Console(),
                                 PathRequest.toStaticResources().atCommonLocations(),
+                                AntPathRequestMatcher.antMatcher("/swagger-ui/**"),
+                                AntPathRequestMatcher.antMatcher("/api-docs/**"),
                                 AntPathRequestMatcher.antMatcher("/")
                         ).permitAll()
                         .requestMatchers(

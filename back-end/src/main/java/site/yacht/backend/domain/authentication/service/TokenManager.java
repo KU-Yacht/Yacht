@@ -22,7 +22,7 @@ import site.yacht.backend.global.service.DateTimeService;
 
 import java.security.Key;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+import java.time.ZoneId;
 import java.util.Date;
 
 @Slf4j
@@ -146,9 +146,8 @@ public class TokenManager {
         }
     }
 
-    public RefreshToken createRefreshTokenEntity(String username, String refreshToken) {
-        LocalDateTime now = dateTimeService.getLocalDateTimeNow();
-        LocalDateTime expiredAt = now.plus(refreshTokenValidityInMilliseconds, ChronoUnit.MILLIS);
-        return new RefreshToken(username, refreshToken, expiredAt);
+    public RefreshToken createRefreshTokenEntity(String username, String refreshToken, Date expiredAt) {
+        LocalDateTime expiredAtToLocalDateTime = LocalDateTime.ofInstant(expiredAt.toInstant(), ZoneId.systemDefault());
+        return new RefreshToken(username, refreshToken, expiredAtToLocalDateTime);
     }
 }
