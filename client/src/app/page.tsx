@@ -20,7 +20,7 @@ export default function Home() {
           <Button variant="secondary">Learn More</Button>
         </div>
       </div>
-      <div className="flex gap-8 items-center w-full justify-between">
+      <div className="flex gap-8 items-center w-full justify-center">
         <div className="flex flex-col gap-4 border rounded-lg w-[442px] h-[194px] p-6">
           <div className="flex gap-4 items-center">
             <Wrench />
