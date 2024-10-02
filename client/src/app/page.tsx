@@ -21,7 +21,7 @@ export default function Home() {
         </div>
       </div>
       <div className="flex flex-col md:flex-row gap-8 items-center w-full justify-center">
-        <div className="flex flex-col gap-4 border rounded-lg w-[442px] h-[194px] p-6">
+        <div className="flex flex-col gap-4 border rounded-lg w-full max-w-[442px] h-[194px] p-6">
           <div className="flex gap-4 items-center">
             <Wrench />
             <h1 className="text-2xl font-semibold">Build</h1>
@@ -32,7 +32,7 @@ export default function Home() {
             application.
           </p>
         </div>
-        <div className="flex flex-col gap-4 border rounded-lg w-[442px] h-[194px] p-6">
+        <div className="flex flex-col gap-4 border rounded-lg w-full max-w-[442px] h-[194px] p-6">
           <div className="flex gap-4 items-center">
             <Rocket />
             <h1 className="text-2xl font-semibold">Deploy</h1>
@@ -43,7 +43,7 @@ export default function Home() {
             different environments.
           </p>
         </div>
-        <div className="flex flex-col gap-4 border rounded-lg w-[442px] h-[194px] p-6">
+        <div className="flex flex-col gap-4 border rounded-lg w-full max-w-[442px] h-[194px] p-6">
           <div className="flex gap-4 items-center">
             <Handshake />
             <h1 className="text-2xl font-semibold">Operation</h1>
