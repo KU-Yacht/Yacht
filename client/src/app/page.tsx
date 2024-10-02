@@ -1,12 +1,10 @@
 import HeroImage from "@/components/hero-image";
-import SEO from "@/components/seo";
 import { Button } from "@/components/ui/button";
 import { Handshake, Rocket, Wrench } from "lucide-react";
 
 export default function Home() {
   return (
     <>
-      <SEO title="Yacht" />
       <div className="flex flex-1 flex-col items-center justify-center gap-20 p-10">
         <HeroImage />
         <div className="flex flex-col items-center gap-6 md:flex-row">

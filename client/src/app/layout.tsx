@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
+import SEO from "@/components/seo";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -34,6 +35,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <SEO title="Yacht" />
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${suite.variable} flex flex-col font-geistSans antialiased`}
       >
