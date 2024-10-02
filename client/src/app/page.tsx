@@ -21,7 +21,7 @@ export default function Home() {
         </div>
       </div>
       <div className="flex w-full flex-col items-center justify-center gap-8 md:flex-row">
-        <div className="flex h-[194px] w-full max-w-[442px] flex-col gap-4 rounded-lg border p-6">
+        <div className="flex min-h-[200px] w-full max-w-[442px] flex-col gap-4 rounded-lg border p-6">
           <div className="flex items-center gap-4">
             <Wrench />
             <h1 className="text-2xl font-semibold">Build</h1>
@@ -32,7 +32,7 @@ export default function Home() {
             application.
           </p>
         </div>
-        <div className="flex h-[194px] w-full max-w-[442px] flex-col gap-4 rounded-lg border p-6">
+        <div className="flex min-h-[200px] w-full max-w-[442px] flex-col gap-4 rounded-lg border p-6">
           <div className="flex items-center gap-4">
             <Rocket />
             <h1 className="text-2xl font-semibold">Deploy</h1>
@@ -43,7 +43,7 @@ export default function Home() {
             different environments.
           </p>
         </div>
-        <div className="flex h-[194px] w-full max-w-[442px] flex-col gap-4 rounded-lg border p-6">
+        <div className="flex min-h-[200px] w-full max-w-[442px] flex-col gap-4 rounded-lg border p-6">
           <div className="flex items-center gap-4">
             <Handshake />
             <h1 className="text-2xl font-semibold">Operation</h1>
