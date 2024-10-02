@@ -4,7 +4,6 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
-import SEO from "@/components/seo";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -26,6 +25,20 @@ export const metadata: Metadata = {
   title: "Yacht",
   description:
     "Kubernetes Build, Deployment, and Operations Automation Platform",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://yacht-liard.vercel.app/",
+    description:
+      "Kubernetes Build, Deployment, and Operations Automation Platform",
+    siteName: "Yacht",
+    images: [
+      {
+        url: "/images/background-logo.png",
+        alt: "Yacht",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -35,7 +48,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <SEO title="Yacht" />
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${suite.variable} flex flex-col font-geistSans antialiased`}
       >
