@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div className="p-10 flex justify-center items-center flex-1 flex-col gap-20">
       <HeroImage />
-      <div className="flex gap-6 items-center">
+      <div className="flex flex-col md:flex-row gap-6 items-center">
         <div className="text-xl w-[600px]">
           <span className="font-extrabold">Yacht </span>
           <span className="text-gray-500">
@@ -20,7 +20,7 @@ export default function Home() {
           <Button variant="secondary">Learn More</Button>
         </div>
       </div>
-      <div className="flex gap-8 items-center w-full justify-center">
+      <div className="flex flex-col md:flex-row gap-8 items-center w-full justify-center">
         <div className="flex flex-col gap-4 border rounded-lg w-[442px] h-[194px] p-6">
           <div className="flex gap-4 items-center">
             <Wrench />
