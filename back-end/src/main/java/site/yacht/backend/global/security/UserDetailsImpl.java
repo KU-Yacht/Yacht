@@ -1,21 +1,20 @@
 package site.yacht.backend.global.security;
 
-import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import site.yacht.backend.domain.user.domain.Role;
 import site.yacht.backend.domain.user.domain.User;
 
 import java.util.Collection;
+import java.util.List;
 
-@Getter
 public record UserDetailsImpl(User user) implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.name()))
-                .toList();
+        Role role = user.getRole();
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override

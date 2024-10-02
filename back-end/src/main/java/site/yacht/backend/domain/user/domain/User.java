@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.yacht.backend.common.BaseTimeEntity;
 
-import java.util.Set;
-
 @Entity
 @Getter
 @Table(name = "users")
@@ -27,13 +25,13 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    @Convert(converter = RoleConverter.class)
-    private Set<Role> roles;
+    private Role role;
 
-    public User(String email, String nickname, Set<Role> roles) {
+    public User(String email, String nickname, Role role) {
         this.email = email;
         this.nickname = nickname;
-        this.roles = roles;
+        this.role = role;
     }
 }
