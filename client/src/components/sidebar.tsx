@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { PanelLeftClose, PanelLeftOpen, Plus } from "lucide-react";
+import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { ReactNode, useState } from "react";
 import AddProjectDialog from "./add-project-dialog";
 
