@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { PanelLeftClose, PanelLeftOpen, Plus } from "lucide-react";
 import { ReactNode, useState } from "react";
+import AddProjectDialog from "./add-project-dialog";
 
 const Sidebar = ({ children }: { children: ReactNode }) => {
   const [open, setOpen] = useState(true);
@@ -37,11 +38,7 @@ const Sidebar = ({ children }: { children: ReactNode }) => {
         {children}
       </div>
 
-      {open && (
-        <div className="flex w-full cursor-pointer items-center justify-center rounded-lg border p-2 hover:bg-gray-200 dark:hover:bg-gray-800">
-          <Plus className="cursor-pointer" />
-        </div>
-      )}
+      {open && <AddProjectDialog />}
     </div>
   );
 };

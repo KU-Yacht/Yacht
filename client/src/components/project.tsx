@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { ChevronDown, LayoutGrid } from "lucide-react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import { useState } from "react";
 
 interface ProjectProps {
@@ -19,6 +20,8 @@ interface ProjectProps {
 
 const Project = ({ data }: ProjectProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const params = useParams();
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex cursor-pointer items-center gap-2">
@@ -41,7 +44,13 @@ const Project = ({ data }: ProjectProps) => {
             key={application.id}
             href={`/projects/${data.id}/application/${application.id}`}
           >
-            <div className="hover:text-bg-gray-700 flex w-full cursor-pointer items-center gap-2 rounded-md p-2 text-gray-500 transition-all duration-300 ease-in-out hover:bg-gray-200 dark:hover:bg-gray-800 dark:hover:text-gray-300">
+            <div
+              className={cn(
+                "hover:text-bg-gray-700 flex w-full cursor-pointer items-center gap-2 rounded-md p-2 text-gray-500 transition-all duration-300 ease-in-out hover:bg-gray-200 dark:hover:bg-gray-800 dark:hover:text-gray-300",
+                params.appId === application.id.toString() &&
+                  "text-bg-gray-700 bg-gray-200 dark:bg-gray-800",
+              )}
+            >
               <LayoutGrid size={16} />
               <h3>{application.name}</h3>
             </div>
