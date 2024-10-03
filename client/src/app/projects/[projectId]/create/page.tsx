@@ -14,28 +14,28 @@ import Link from "next/link";
 
 const Page = ({ params }: { params: { projectId: string } }) => {
   return (
-    <div className="flex w-full flex-col gap-10 p-10">
+    <div className="flex w-full flex-col gap-10 p-6 md:p-10">
       <div className="flex w-full items-center justify-between gap-6">
         <div className="flex items-center gap-4">
           <Rocket size={30} />
-          <h1 className="text-4xl font-bold">
+          <h1 className="text-xl font-bold md:text-4xl">
             Create Application to Project {params.projectId}
           </h1>
         </div>
 
-        <Button asChild variant="secondary">
+        <Button asChild variant="secondary" className="text-xs md:text-sm">
           <Link href={`/projects/${params.projectId}`}>Back</Link>
         </Button>
       </div>
 
       <form className="flex flex-col gap-8">
         <div className="grid grid-cols-4 gap-4">
-          <div className="flex flex-col gap-4">
+          <div className="col-span-4 flex flex-col gap-4 md:col-span-1">
             <Label htmlFor="name">Name</Label>
             <Input id="name" placeholder="Application Name" required />
           </div>
 
-          <div className="col-span-3 flex flex-col gap-4">
+          <div className="col-span-4 flex flex-col gap-4 md:col-span-3">
             <Label htmlFor="description">Description</Label>
             <Input
               id="description"
@@ -46,19 +46,19 @@ const Page = ({ params }: { params: { projectId: string } }) => {
         </div>
 
         <div className="grid grid-cols-5 gap-4">
-          <div className="col-span-3 flex w-full flex-col gap-4">
+          <div className="col-span-5 flex w-full flex-col gap-4 md:col-span-3">
             <Label htmlFor="repository">Repository URL</Label>
             <Input id="repository" placeholder="Repository URL" required />
           </div>
 
-          <div className="col-span-2 flex w-full flex-col gap-4">
+          <div className="col-span-5 flex w-full flex-col gap-4 md:col-span-2">
             <Label htmlFor="location">Build file location</Label>
             <Input id="location" placeholder="Location" required />
           </div>
         </div>
 
         <div className="grid grid-cols-4 gap-4">
-          <div className="col-span-1 flex flex-col gap-4">
+          <div className="col-span-2 flex flex-col gap-4 md:col-span-1">
             <Label htmlFor="cpu">CPU Core</Label>
             <Select>
               <SelectTrigger>
@@ -73,11 +73,11 @@ const Page = ({ params }: { params: { projectId: string } }) => {
             </Select>
           </div>
 
-          <div className="col-span-1 flex flex-col gap-4">
+          <div className="col-span-2 flex flex-col gap-4 md:col-span-1">
             <Label htmlFor="mem">Memory</Label>
             <Select>
               <SelectTrigger>
-                <SelectValue placeholder="mem" />
+                <SelectValue placeholder="Memory" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="1">1 GB</SelectItem>
@@ -89,11 +89,11 @@ const Page = ({ params }: { params: { projectId: string } }) => {
             </Select>
           </div>
 
-          <div className="col-span-2 flex flex-col gap-4">
+          <div className="col-span-4 flex flex-col gap-4 md:col-span-2">
             <Label htmlFor="disk">Disk</Label>
             <Select>
               <SelectTrigger>
-                <SelectValue placeholder="disk" />
+                <SelectValue placeholder="Disk" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="4">4 GB</SelectItem>
@@ -117,7 +117,7 @@ const Page = ({ params }: { params: { projectId: string } }) => {
 
         <Button
           type="submit"
-          className="flex items-center gap-4 self-end px-4 py-6 text-lg"
+          className="flex items-center gap-4 self-end px-4 py-6 text-sm md:text-lg"
         >
           <Plus size={24} />
           Create Application

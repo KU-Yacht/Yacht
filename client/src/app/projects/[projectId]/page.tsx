@@ -21,10 +21,15 @@ const Page = ({ params }: { params: { projectId: string } }) => {
   return (
     <div className="flex h-full w-full flex-col gap-10 p-10">
       <div className="flex items-center justify-between">
-        <h1 className="text-4xl font-bold">Project {params.projectId}</h1>
-        <Button asChild className="flex items-center gap-4 px-4 py-6 text-lg">
+        <h1 className="text-3xl font-bold md:text-4xl">
+          Project {params.projectId}
+        </h1>
+        <Button
+          asChild
+          className="flex items-center gap-4 text-xs md:px-4 md:py-6 md:text-lg"
+        >
           <Link href={`/projects/${params.projectId}/create`}>
-            <Plus size={24} />
+            <Plus size={24} className="hidden md:block" />
             Create Application
           </Link>
         </Button>
@@ -44,27 +49,36 @@ const Page = ({ params }: { params: { projectId: string } }) => {
 
               <p className="text-gray-500">{application.description}</p>
 
-              <div className="flex items-center justify-between gap-10">
+              <div className="flex flex-col items-center justify-between gap-10 md:flex-row">
                 <div className="flex items-center gap-4 rounded-xl border p-4 text-green-600">
                   <CheckCircle size={20} />
                   <h3 className="text-xl font-semibold">Prepare</h3>
                 </div>
 
-                <Ellipsis size={30} />
+                <Ellipsis
+                  size={30}
+                  className="rotate-90 transform md:rotate-0"
+                />
 
                 <div className="flex items-center gap-4 rounded-xl border p-4">
                   <CheckCircle size={20} />
                   <h3 className="text-xl font-semibold">Build</h3>
                 </div>
 
-                <Ellipsis size={30} />
+                <Ellipsis
+                  size={30}
+                  className="rotate-90 transform md:rotate-0"
+                />
 
                 <div className="flex items-center gap-4 rounded-xl border p-4">
                   <CheckCircle size={20} />
                   <h3 className="text-xl font-semibold">Deploy</h3>
                 </div>
 
-                <Ellipsis size={30} />
+                <Ellipsis
+                  size={30}
+                  className="rotate-90 transform md:rotate-0"
+                />
 
                 <div className="flex items-center gap-4 rounded-xl border p-4">
                   <CheckCircle size={20} />

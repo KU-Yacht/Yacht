@@ -20,7 +20,7 @@ const AddProjectDialog = () => {
           <Plus className="cursor-pointer" />
         </div>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="w-[350px] rounded-xl md:w-[450px]">
         <DialogHeader>
           <DialogTitle>Add new Project</DialogTitle>
           <DialogDescription>

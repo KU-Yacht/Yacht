@@ -12,19 +12,19 @@ const Sidebar = ({ children }: { children: ReactNode }) => {
     <div
       className={cn(
         "flex flex-col items-center p-4 transition-all duration-300 ease-in-out",
-        open ? "w-[250px]" : "w-[50px]",
+        open ? "w-full md:w-[250px]" : "w-full md:w-[50px]",
       )}
     >
       <div className="flex w-full justify-end border-b pb-4">
         {open ? (
           <PanelLeftClose
             onClick={() => setOpen(false)}
-            className="cursor-pointer"
+            className={"-rotate-90 transform cursor-pointer md:rotate-0"}
           />
         ) : (
           <PanelLeftOpen
             onClick={() => setOpen(true)}
-            className="cursor-pointer"
+            className="-rotate-90 transform cursor-pointer md:rotate-0"
           />
         )}
       </div>
