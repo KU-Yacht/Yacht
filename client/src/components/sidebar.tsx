@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { PanelLeftClose, PanelLeftOpen, User } from "lucide-react";
 import { ReactNode, useState } from "react";
 import AddProjectDialog from "./add-project-dialog";
 
@@ -15,7 +15,15 @@ const Sidebar = ({ children }: { children: ReactNode }) => {
         open ? "w-full md:w-[250px]" : "w-full md:w-[50px]",
       )}
     >
-      <div className="flex w-full justify-end border-b pb-4">
+      <div className="flex w-full justify-between border-b pb-4">
+        {open ? (
+          <div className="flex items-center gap-2">
+            <User />
+            Minboy
+          </div>
+        ) : (
+          <div className="invisible"></div>
+        )}
         {open ? (
           <PanelLeftClose
             onClick={() => setOpen(false)}
@@ -32,7 +40,7 @@ const Sidebar = ({ children }: { children: ReactNode }) => {
       <div
         className={cn(
           "max-h-screen overflow-auto",
-          open ? "w-[250px]" : "hidden",
+          open ? "w-full md:w-[250px]" : "hidden",
         )}
       >
         {children}

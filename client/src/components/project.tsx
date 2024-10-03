@@ -24,7 +24,7 @@ const Project = ({ data }: ProjectProps) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex cursor-pointer items-center gap-2">
+      <div className="flex cursor-pointer items-center justify-center gap-2 md:justify-normal">
         <ChevronDown
           onClick={() => setIsOpen((prev) => !prev)}
           size={20}
@@ -46,7 +46,7 @@ const Project = ({ data }: ProjectProps) => {
           >
             <div
               className={cn(
-                "hover:text-bg-gray-700 flex w-full cursor-pointer items-center gap-2 rounded-md p-2 text-gray-500 transition-all duration-300 ease-in-out hover:bg-gray-200 dark:hover:bg-gray-800 dark:hover:text-gray-300",
+                "hover:text-bg-gray-700 flex w-full cursor-pointer items-center justify-center gap-2 rounded-md p-2 text-gray-500 transition-all duration-300 ease-in-out hover:bg-gray-200 dark:hover:bg-gray-800 dark:hover:text-gray-300 md:justify-normal",
                 params.appId === application.id.toString() &&
                   "text-bg-gray-700 bg-gray-200 dark:bg-gray-800",
               )}
