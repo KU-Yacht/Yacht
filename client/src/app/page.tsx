@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Handshake, Rocket, Wrench } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -17,7 +18,9 @@ export default function Home() {
             </span>
           </div>
           <div className="flex gap-4">
-            <Button>Get Started</Button>
+            <Button asChild>
+              <Link href="/projects">Get Started</Link>
+            </Button>
             <Button variant="secondary">Learn More</Button>
           </div>
         </div>
