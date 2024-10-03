@@ -1,12 +1,12 @@
-import HeroImage from "@/components/hero-image";
 import { Button } from "@/components/ui/button";
 import { Handshake, Rocket, Wrench } from "lucide-react";
+import Image from "next/image";
 
 export default function Home() {
   return (
     <>
       <div className="flex flex-1 flex-col items-center justify-center gap-20 p-10">
-        <HeroImage />
+        <Image src="/images/hero.png" alt="Yacht" width={450} height={450} />
         <div className="flex flex-col items-center gap-6 md:flex-row">
           <div className="max-w-[600px] text-xl">
             <span className="font-extrabold">Yacht </span>
