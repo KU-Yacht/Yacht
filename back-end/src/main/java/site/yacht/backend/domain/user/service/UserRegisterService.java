@@ -24,8 +24,6 @@ public class UserRegisterService {
         String encryptedPassword = passwordEncoder.encode(password);
         User user = new User(email, encryptedPassword, nickname);
         userRepository.save(user);
-
-        // TODO Create default Project
     }
 
     private void validateDuplicateEmail(String email) {
