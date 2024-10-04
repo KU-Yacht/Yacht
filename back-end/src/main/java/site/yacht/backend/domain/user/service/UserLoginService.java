@@ -9,6 +9,7 @@ import site.yacht.backend.domain.authentication.dto.TokenDto;
 import site.yacht.backend.domain.authentication.repository.RefreshTokenRepository;
 import site.yacht.backend.domain.authentication.service.TokenManager;
 import site.yacht.backend.domain.user.domain.User;
+import site.yacht.backend.domain.user.dto.LoginInformation;
 import site.yacht.backend.domain.user.repository.UserRepository;
 import site.yacht.backend.global.error.exception.AuthenticationException;
 
@@ -22,7 +23,7 @@ public class UserLoginService {
     private final RefreshTokenRepository refreshTokenRepository;
 
     @Transactional
-    public TokenDto login(String email, String password) {
+    public LoginInformation login(String email, String password) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(AuthenticationException::new);
 
@@ -39,7 +40,7 @@ public class UserLoginService {
         );
         refreshTokenRepository.save(refreshTokenEntity);
 
-        return tokenDto;
+        return new LoginInformation(tokenDto, user);
     }
 
 }
