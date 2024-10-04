@@ -36,6 +36,6 @@ out/
 ### VS Code ###
 .vscode/
 
-.DS_Store
+**/.DS_Store
 application-*.yml
 application-*-log.properties
