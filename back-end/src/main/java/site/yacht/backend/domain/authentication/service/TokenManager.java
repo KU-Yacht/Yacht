@@ -59,7 +59,7 @@ public class TokenManager {
         Date refreshTokenExpiredAt = createRefreshTokenExpirationTime(now);
 
         String accessToken = createAccessToken(username, accessTokenExpiredAt);
-        String refreshToken = createRefreshTokenEntity(username, refreshTokenExpiredAt);
+        String refreshToken = createRefreshToken(username, refreshTokenExpiredAt);
 
         return new TokenDto(GrantType.BEARER.getType(), accessToken, refreshToken, accessTokenExpiredAt, refreshTokenExpiredAt);
     }
@@ -83,7 +83,7 @@ public class TokenManager {
                 .compact();
     }
 
-    private String createRefreshTokenEntity(String username, Date expireDate) {
+    private String createRefreshToken(String username, Date expireDate) {
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setIssuer(issuer)
