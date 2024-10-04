@@ -16,17 +16,23 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "C005", "Internal server error"),
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "C006", "Bad Request"),
 
-    // User
-    EMAIL_DUPLICATION(HttpStatus.BAD_REQUEST, "U001", "Unavailable email"),
-    NICKNAME_DUPLICATION(HttpStatus.BAD_REQUEST, "U002", "Unavailable nickname"),
-    USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "U003", "Not found user"),
-
-    // Authentication
+    // Auth
     EMPTY_AUTHORIZATION(HttpStatus.UNAUTHORIZED, "A001", "Authorization header is empty"),
     NOT_BEARER_GRANT_TYPE(HttpStatus.UNAUTHORIZED, "A002", "Grant type is not Bearer"),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "A003", "Invalid Token"),
     EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "A004", "Expired Token"),
     FAIL_AUTHENTICATION(HttpStatus.UNAUTHORIZED, "A007", "Fail Authentication"),
+    NO_AUTHORIZATION(HttpStatus.FORBIDDEN, "A008", "No authorization"),
+
+    // User
+    EMAIL_DUPLICATION(HttpStatus.BAD_REQUEST, "U001", "Unavailable email"),
+    NICKNAME_DUPLICATION(HttpStatus.BAD_REQUEST, "U002", "Unavailable nickname"),
+    USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "U003", "Not found user"),
+
+    // Project
+    PROJECT_NOT_FOUND(HttpStatus.BAD_REQUEST, "P001", "Not found project"),
+    PROJECT_NAME_DUPLICATION(HttpStatus.BAD_REQUEST, "P002", "Unavailable project name"),
+
 
     ;
 

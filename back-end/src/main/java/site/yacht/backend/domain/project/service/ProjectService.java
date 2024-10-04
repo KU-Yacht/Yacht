@@ -5,12 +5,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.yacht.backend.domain.project.domain.Project;
 import site.yacht.backend.domain.project.dto.UserProjectInfoDto;
+import site.yacht.backend.domain.project.exception.ProjectNameDuplicationException;
+import site.yacht.backend.domain.project.exception.ProjectNotFoundException;
 import site.yacht.backend.domain.project.repository.ProjectRepository;
 import site.yacht.backend.domain.user.domain.User;
 import site.yacht.backend.domain.user.repository.UserRepository;
 import site.yacht.backend.domain.user_project.domain.Role;
 import site.yacht.backend.domain.user_project.domain.UserProject;
 import site.yacht.backend.domain.user_project.repository.UserProjectRepository;
+import site.yacht.backend.global.error.exception.AuthorizationException;
+import site.yacht.backend.global.error.exception.IllegalException;
 
 import java.util.List;
 
@@ -33,7 +37,7 @@ public class ProjectService {
     @Transactional
     public void inviteProject(Long userId, Long projectId, List<String> emails) {
         Project project = projectRepository.findProjectById(projectId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
+                .orElseThrow(ProjectNotFoundException::new);
 
         validateInviterPermission(userId, projectId);
 
@@ -48,20 +52,20 @@ public class ProjectService {
 
     private void validateInviterPermission(Long userId, Long projectId) {
         UserProject userProject = userProjectRepository.findByUserIdAndProjectId(userId, projectId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트에 참여하고 있지 않습니다."));
+                .orElseThrow(AuthorizationException::new);
         if (userProject.hasNotInvitationPermission()) {
-            throw new IllegalArgumentException("해당 프로젝트에 초대 권한이 없습니다.");
+            throw new AuthorizationException();
         }
     }
 
     private void validateUser(Long projectId, List<String> emails, List<User> users) {
         if (users.size() != emails.size()) {
-            throw new IllegalArgumentException("존재하지 않는 사용자가 포함되어 있습니다.");
+            throw new IllegalException("Contains a user that doesn't exist");
         }
 
         for (User user : users) {
             if (userProjectRepository.existsByUserIdAndProjectId(user.getId(), projectId)) {
-                throw new IllegalArgumentException("이미 참여하고 있는 사용자가 포함되어 있습니다.");
+                throw new IllegalException("Contains users who are already joined");
             }
         }
     }
@@ -69,7 +73,7 @@ public class ProjectService {
     @Transactional
     public void createProject(User user, String projectName) {
         if (projectRepository.existsByName(projectName)) {
-            throw new IllegalArgumentException("이미 존재하는 프로젝트 이름입니다.");
+            throw new ProjectNameDuplicationException();
         }
 
         Project project = new Project(projectName);
