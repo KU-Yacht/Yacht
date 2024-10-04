@@ -27,17 +27,17 @@ jobs:
 
       - name: injection application.yml
         run: |
-          touch src/main/resources/application-dev.yml
-          touch src/main/resources/application-test.yml
+          touch back-end/src/main/resources/application-dev.yml
+          touch back-end/src/main/resources/application-test.yml
           echo "${{ secrets.DEV_YML }}" > src/main/resources/application-dev.yml
           echo "${{ secrets.TEST_YML }}" > src/main/resources/application-test.yml
         shell: bash
 
       - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew
+        run: chmod +x back-end/gradlew
 
       - name: Build with Gradle
-        run: ./gradlew clean build
+        run: back-end/gradlew clean build
 
       - name: Deliver JAR File
         uses: appleboy/scp-action@master
@@ -46,7 +46,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          source: "build/libs/*.jar"
+          source: "back-end/build/libs/*.jar"
           target: "source"
           rm: true
 
@@ -58,7 +58,7 @@ jobs:
           key: ${{ secrets.SSH_PRVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            SOURCE_DIR=source/build/libs
+            SOURCE_DIR=back-end/source/build/libs
             FILE_NAME=`find $SOURCE_DIR/*.jar -printf "%f\n"`
             PID=$(sudo lsof -Fp -i TCP:8080 | grep -Po 'p[0-9]+' | grep -Po '[0-9]+')
 
