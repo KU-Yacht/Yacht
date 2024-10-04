@@ -37,7 +37,9 @@ jobs:
         run: chmod +x back-end/gradlew
 
       - name: Build with Gradle
-        run: back-end/gradlew clean build
+        run: |
+          cd back-end
+          gradlew clean build
 
       - name: Deliver JAR File
         uses: appleboy/scp-action@master
