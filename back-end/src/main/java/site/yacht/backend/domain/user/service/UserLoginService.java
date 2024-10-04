@@ -33,14 +33,21 @@ public class UserLoginService {
         }
 
         TokenDto tokenDto = tokenManager.createTokenDto(user.getEmail());
+
+        saveUniqueRefreshToken(user, tokenDto);
+
+        return new LoginInformation(tokenDto, user);
+    }
+
+    private void saveUniqueRefreshToken(User user, TokenDto tokenDto) {
+        refreshTokenRepository.deleteByUserEmail(user.getEmail());
+
         RefreshToken refreshTokenEntity = tokenManager.createRefreshTokenEntity(
                 user.getEmail(),
                 tokenDto.refreshToken(),
                 tokenDto.refreshTokenExpiredAt()
         );
         refreshTokenRepository.save(refreshTokenEntity);
-
-        return new LoginInformation(tokenDto, user);
     }
 
 }
