@@ -25,6 +25,20 @@ export const metadata: Metadata = {
   title: "Yacht",
   description:
     "Kubernetes Build, Deployment, and Operations Automation Platform",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://yacht-liard.vercel.app/",
+    description:
+      "Kubernetes Build, Deployment, and Operations Automation Platform",
+    siteName: "Yacht",
+    images: [
+      {
+        url: "/images/background-logo.png",
+        alt: "Yacht",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -35,7 +49,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${suite.variable} antialiased font-geistSans flex flex-col`}
+        className={`${geistSans.variable} ${geistMono.variable} ${suite.variable} flex flex-col font-geistSans antialiased`}
       >
         <ThemeProvider
           attribute="class"
