@@ -25,14 +25,14 @@ const Sidebar = ({ children }: { children: ReactNode }) => {
           <div className="invisible"></div>
         )}
         {open ? (
-          <PanelLeftClose
+          <PanelLeftOpen
             onClick={() => setOpen(false)}
-            className={"-rotate-90 transform cursor-pointer md:rotate-0"}
+            className="-rotate-90 transform cursor-pointer md:rotate-0"
           />
         ) : (
-          <PanelLeftOpen
+          <PanelLeftClose
             onClick={() => setOpen(true)}
-            className="-rotate-90 transform cursor-pointer md:rotate-0"
+            className={"-rotate-90 transform cursor-pointer md:rotate-0"}
           />
         )}
       </div>

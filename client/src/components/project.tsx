@@ -30,7 +30,7 @@ const Project = ({ data }: ProjectProps) => {
           size={20}
           className={cn(
             "transition-transform duration-300 ease-in-out",
-            !isOpen && "-rotate-180 transform",
+            !isOpen && "rotate-180 transform",
           )}
         />
         <Link href={`/projects/${data.id}`}>
