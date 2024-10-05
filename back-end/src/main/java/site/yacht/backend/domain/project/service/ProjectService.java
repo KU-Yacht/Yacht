@@ -35,14 +35,14 @@ public class ProjectService {
     }
 
     @Transactional
-    public void inviteProject(Long userId, Long projectId, List<String> emails) {
-        Project project = projectRepository.findProjectById(projectId)
+    public void inviteProject(Long userId, String projectName, List<String> emails) {
+        Project project = projectRepository.findProjectByName(projectName)
                 .orElseThrow(ProjectNotFoundException::new);
 
-        validateInviterPermission(userId, projectId);
+        validateInviterPermission(userId, project.getId());
 
         List<User> users = userRepository.findByEmailIn(emails);
-        validateUser(projectId, emails, users);
+        validateUser(project.getId(), emails, users);
 
         for (User user : users) {
             UserProject userProject = new UserProject(user, project, Role.ROLE_VIEWER);
