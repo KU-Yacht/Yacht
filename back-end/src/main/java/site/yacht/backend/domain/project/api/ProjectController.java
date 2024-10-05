@@ -25,7 +25,7 @@ public class ProjectController {
 
     @GetMapping
     @Operation(summary = "자신의 프로젝트 조회", description = "현재 자신이 속한 프로젝트 목록을 조회합니다.")
-    public List<FindProjectListResponse> findProjectListResponse(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public List<FindProjectListResponse> findMyProjects(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<UserProjectInfoDto> userProjectInfoDtos = projectService.findProjects(userDetails.user());
         return userProjectInfoDtos.stream()
                 .map(FindProjectListResponse::from)
