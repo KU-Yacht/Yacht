@@ -3,6 +3,8 @@ package site.yacht.backend.domain.project.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.yacht.backend.domain.application.domain.Application;
+import site.yacht.backend.domain.application.repository.ApplicationRepository;
 import site.yacht.backend.domain.project.domain.Project;
 import site.yacht.backend.domain.project.dto.UserProjectInfoDto;
 import site.yacht.backend.domain.project.exception.ProjectNameDuplicationException;
@@ -26,11 +28,21 @@ public class ProjectService {
     private final UserProjectRepository userProjectRepository;
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
+    private final ApplicationRepository applicationRepository;
 
     public List<UserProjectInfoDto> findProjects(User user) {
         List<UserProject> userProjects = userProjectRepository.findByUserJoinProject(user);
+
         return userProjects.stream()
-                .map(userProject -> new UserProjectInfoDto(userProject.getProject().getId(), userProject.getProject().getName(), userProject.getRole()))
+                .map(userProject -> {
+                    List<Application> applications = applicationRepository.findByProjectId(userProject.getProject().getId());
+                    return new UserProjectInfoDto(
+                            userProject.getProject().getId(),
+                            userProject.getProject().getName(),
+                            userProject.getRole(),
+                            applications
+                    );
+                })
                 .toList();
     }
 
