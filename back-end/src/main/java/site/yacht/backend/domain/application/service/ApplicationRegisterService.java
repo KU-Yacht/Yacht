@@ -30,25 +30,30 @@ public class ApplicationRegisterService {
     public void registerApplication(ApplicationRegisterDto applicationRegisterDto) {
         Project project = projectRepository.findProjectByName(applicationRegisterDto.projectName())
                 .orElseThrow(ProjectNotFoundException::new);
-
         validatePermission(applicationRegisterDto.user().getId(), project.getId());
         validateApplicationName(applicationRegisterDto.name(), project);
 
+        Template template = templateRepository.findByTitle(applicationRegisterDto.templateName())
+                .orElseThrow(TemplateNotFoundException::new);
+
         // GitUrl 검증
         // Docker file 검증
-        // ValueYaml 검증
-
-        // Nullable
-        Template template = getSettingTemplate(applicationRegisterDto.templateName());
+        String valueYaml = ""; // yaml 생성
 
         Application application = Application.builder()
                 .project(project)
                 .template(template)
+                .valueYaml(valueYaml)
                 .user(applicationRegisterDto.user())
                 .name(applicationRegisterDto.name())
                 .description(applicationRegisterDto.description())
                 .gitUrl(applicationRegisterDto.gitUrl())
-                .valueYaml(applicationRegisterDto.valueYaml())
+                .region(applicationRegisterDto.region())
+                .namespace(applicationRegisterDto.namespace())
+                .replicaNumber(applicationRegisterDto.replicaNumber())
+                .cpu(applicationRegisterDto.cpu())
+                .port(applicationRegisterDto.port())
+                .memory(applicationRegisterDto.memory())
                 .build();
         applicationRepository.save(application);
     }
@@ -65,14 +70,6 @@ public class ApplicationRegisterService {
         if (applicationRepository.existsByNameAndProject(applicationName, project)) {
             throw new ApplicationNameDuplicationException();
         }
-    }
-
-    private Template getSettingTemplate(String templateName) {
-        if (templateName == null) {
-            return null;
-        }
-        return templateRepository.findByTitle(templateName)
-                .orElseThrow(TemplateNotFoundException::new);
     }
 
 }

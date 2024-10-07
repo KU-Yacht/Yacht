@@ -34,6 +34,14 @@ public class Application extends BaseTimeEntity {
     @JoinColumn(name = "template_id", nullable = false)
     private Template template;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Region region;
+
+    @Lob
+    @Column(nullable = false)
+    private String valueYaml;
+
     @Column(nullable = false)
     private String name;
 
@@ -42,18 +50,30 @@ public class Application extends BaseTimeEntity {
     @Column(nullable = false, name = "git_url")
     private String gitUrl;
 
-    @Lob
     @Column(nullable = false)
-    private String valueYaml;
+    private String namespace;
+
+    @Column(nullable = false, name = "replica_number")
+    private int replicaNumber;
+    private int cpu;
+    private int memory;
+    private int port;
 
     @Builder
-    public Application(Project project, User user, Template template, String name, String description, String gitUrl, String valueYaml) {
+    public Application(Project project, User user, Template template, Region region, String valueYaml, String name,
+                       String description, String gitUrl, String namespace, int replicaNumber, int cpu, int memory, int port) {
         this.project = project;
         this.user = user;
         this.template = template;
+        this.region = region;
+        this.valueYaml = valueYaml;
         this.name = name;
         this.description = description;
         this.gitUrl = gitUrl;
-        this.valueYaml = valueYaml;
+        this.namespace = namespace;
+        this.replicaNumber = replicaNumber;
+        this.cpu = cpu;
+        this.memory = memory;
+        this.port = port;
     }
 }

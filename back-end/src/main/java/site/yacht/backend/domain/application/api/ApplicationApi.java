@@ -8,8 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import site.yacht.backend.domain.application.api.request.ApplicationRegisterRequest;
+import site.yacht.backend.domain.application.domain.Region;
 import site.yacht.backend.domain.application.dto.ApplicationRegisterDto;
 import site.yacht.backend.domain.application.service.ApplicationRegisterService;
+import site.yacht.backend.global.error.exception.IllegalException;
 import site.yacht.backend.global.security.UserDetailsImpl;
 
 @RestController
@@ -25,16 +27,23 @@ public class ApplicationApi {
     @Operation(summary = "애플리케이션 등록", description = "신규 애플리케이션을 등록합니다.")
     public void registerApplication(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                     @RequestBody @Valid ApplicationRegisterRequest request) {
+        Region region = Region.fromString(request.getRegion())
+                .orElseThrow(() -> new IllegalException("wrong region"));
 
-        ApplicationRegisterDto applicationRegisterDto = new ApplicationRegisterDto(
-                userDetails.user(),
-                request.getApplicationName(),
-                request.getDescription(),
-                request.getGitUrl(),
-                request.getValueYaml(),
-                request.getTemplateName(),
-                request.getProjectName()
-        );
+        ApplicationRegisterDto applicationRegisterDto = ApplicationRegisterDto.builder()
+                .region(region)
+                .cpu(request.getCpu())
+                .port(request.getPort())
+                .user(userDetails.user())
+                .memory(request.getMemory())
+                .gitUrl(request.getGitUrl())
+                .namespace(request.getNamespace())
+                .name(request.getApplicationName())
+                .description(request.getDescription())
+                .projectName(request.getProjectName())
+                .templateName(request.getTemplateName())
+                .replicaNumber(request.getReplicaNumber())
+                .build();
 
         applicationRegisterService.registerApplication(applicationRegisterDto);
     }

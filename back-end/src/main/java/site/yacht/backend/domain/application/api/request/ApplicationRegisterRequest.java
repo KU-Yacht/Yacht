@@ -7,6 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.Range;
+import site.yacht.backend.domain.application.domain.Region;
+import site.yacht.backend.global.validation.ValidEnum;
 
 @Getter
 @AllArgsConstructor
@@ -30,11 +33,31 @@ public class ApplicationRegisterRequest {
     @Schema(description = "GIT URL", example = "https://github.com/KU-Yacht/Yacht", requiredMode = RequiredMode.REQUIRED)
     private String gitUrl;
 
-    @NotBlank(message = "value Yaml은 필수값입니다.")
-    @Schema(description = "value Yaml", example = "", requiredMode = RequiredMode.REQUIRED)
-    private String valueYaml;
-
-    @Schema(description = "template 이름", example = "Simple spring server")
+    @NotBlank(message = "git URL은 필수값입니다.")
+    @Schema(description = "template 이름", example = "spring server template", requiredMode = RequiredMode.REQUIRED)
     private String templateName;
 
+    @ValidEnum(enumClass = Region.class)
+    @Schema(description = "Region(KOREA, US, JAPAN, CHINA)", example = "KOREA", requiredMode = RequiredMode.REQUIRED)
+    private String region;
+
+    @NotBlank(message = "namespace는 필수값입니다.")
+    @Schema(description = "namespace", example = "default", requiredMode = RequiredMode.REQUIRED)
+    private String namespace;
+
+    @Range(min = 1, max = 10, message = "replica number는 1이상 10이하여야 합니다.")
+    @Schema(description = "replicaNumber", example = "1", minimum = "1", maximum = "10", requiredMode = RequiredMode.REQUIRED)
+    private int replicaNumber;
+
+    @Range(min = 1, max = 10, message = "cpu는 1이상 10이하여야 합니다.")
+    @Schema(description = "cpu(core)", example = "1", minimum = "1", maximum = "10", requiredMode = RequiredMode.REQUIRED)
+    private int cpu;
+
+    @Range(min = 256, max = 164064, message = "memory는 256이상 164064이하여야 합니다.")
+    @Schema(description = "memory(MB)", example = "2048", minimum = "256", maximum = "164064", requiredMode = RequiredMode.REQUIRED)
+    private int memory;
+
+    @Range(min = 1, max = 65535, message = "port는 1이상 65535이하여야 합니다.")
+    @Schema(description = "port", example = "8080", minimum = "1", maximum = "65535", requiredMode = RequiredMode.REQUIRED)
+    private int port;
 }
