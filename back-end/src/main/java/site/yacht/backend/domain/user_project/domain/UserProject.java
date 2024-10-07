@@ -41,4 +41,8 @@ public class UserProject extends BaseTimeEntity {
     public boolean hasNotInvitationPermission() {
         return role != Role.ROLE_ADMIN;
     }
+
+    public boolean hasNotRegisterApplicationPermission() {
+        return !(role == Role.ROLE_EDITOR || role == Role.ROLE_ADMIN);
+    }
 }

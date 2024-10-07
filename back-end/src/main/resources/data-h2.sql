@@ -20,3 +20,10 @@ values (2, 2, 1, 'ROLE_EDITOR', NOW(), NOW());
 
 insert into USER_PROJECT (id, user_id, project_id, role, created_at, updated_at)
 values (3, 3, 1, 'ROLE_VIEWER', NOW(), NOW());
+
+
+insert into TEMPLATE (id, path, title, description, created_at, updated_at)
+values (1, 'path', 'spring server template', 'Simple deploy Spring server', NOW(), NOW());
+
+insert into TEMPLATE (id, path, title, description, created_at, updated_at)
+values (2, 'path', 'react template', 'Simple deploy react', NOW(), NOW());

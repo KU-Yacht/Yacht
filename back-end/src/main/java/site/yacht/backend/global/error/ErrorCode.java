@@ -33,6 +33,11 @@ public enum ErrorCode {
     PROJECT_NOT_FOUND(HttpStatus.BAD_REQUEST, "P001", "Not found project"),
     PROJECT_NAME_DUPLICATION(HttpStatus.BAD_REQUEST, "P002", "Unavailable project name"),
 
+    // Template
+    TEMPLATE_NOT_FOUND(HttpStatus.BAD_REQUEST, "T001", "Not found template"),
+
+    // Application
+    APPLICATION_NAME_DUPLICATION(HttpStatus.BAD_REQUEST, "AA01", "Unavailable application name"),
 
     ;
 
