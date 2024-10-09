@@ -2,6 +2,7 @@ package site.yacht.backend.domain.deployment_history.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.yacht.backend.common.BaseTimeEntity;
@@ -30,6 +31,7 @@ public class DeploymentHistory extends BaseTimeEntity {
     @Column(name = "argo_workflow_id", nullable = false)
     private String argoWorkflowId;
 
+    @Builder
     public DeploymentHistory(Application application, String generatedYaml, String commitId, String argoWorkflowId) {
         this.application = application;
         this.generatedYaml = generatedYaml;

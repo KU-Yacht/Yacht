@@ -25,9 +25,9 @@ public enum ErrorCode {
     NO_AUTHORIZATION(HttpStatus.FORBIDDEN, "A008", "No authorization"),
 
     // User
-    EMAIL_DUPLICATION(HttpStatus.BAD_REQUEST, "U001", "Unavailable email"),
-    NICKNAME_DUPLICATION(HttpStatus.BAD_REQUEST, "U002", "Unavailable nickname"),
-    USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "U003", "Not found user"),
+    USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "U001", "Not found user"),
+    EMAIL_DUPLICATION(HttpStatus.BAD_REQUEST, "U002", "Unavailable email"),
+    NICKNAME_DUPLICATION(HttpStatus.BAD_REQUEST, "U003", "Unavailable nickname"),
 
     // Project
     PROJECT_NOT_FOUND(HttpStatus.BAD_REQUEST, "P001", "Not found project"),
@@ -37,7 +37,8 @@ public enum ErrorCode {
     TEMPLATE_NOT_FOUND(HttpStatus.BAD_REQUEST, "T001", "Not found template"),
 
     // Application
-    APPLICATION_NAME_DUPLICATION(HttpStatus.BAD_REQUEST, "AA01", "Unavailable application name"),
+    APPLICATION_NOT_FOUND(HttpStatus.BAD_REQUEST, "AA01", "Not found application"),
+    APPLICATION_NAME_DUPLICATION(HttpStatus.BAD_REQUEST, "AA02", "Unavailable application name"),
 
     ;
 
