@@ -3,10 +3,14 @@ package site.yacht.backend.domain.application.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.yacht.backend.domain.application.api.response.FindApplicationDetailResponse;
 import site.yacht.backend.domain.application.domain.Application;
 import site.yacht.backend.domain.application.dto.ApplicationRegisterDto;
 import site.yacht.backend.domain.application.exception.ApplicationNameDuplicationException;
+import site.yacht.backend.domain.application.exception.ApplicationNotFoundException;
 import site.yacht.backend.domain.application.repository.ApplicationRepository;
+import site.yacht.backend.domain.deployment_history.domain.DeploymentHistory;
+import site.yacht.backend.domain.deployment_history.repository.DeploymentHistoryRepository;
 import site.yacht.backend.domain.project.domain.Project;
 import site.yacht.backend.domain.project.exception.ProjectNotFoundException;
 import site.yacht.backend.domain.project.repository.ProjectRepository;
@@ -19,12 +23,14 @@ import site.yacht.backend.global.error.exception.AuthorizationException;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ApplicationRegisterService {
 
     private final ApplicationRepository applicationRepository;
     private final TemplateRepository templateRepository;
     private final ProjectRepository projectRepository;
     private final UserProjectRepository userProjectRepository;
+    private final DeploymentHistoryRepository deploymentHistoryRepository;
 
     @Transactional
     public void registerApplication(ApplicationRegisterDto applicationRegisterDto) {
@@ -72,4 +78,16 @@ public class ApplicationRegisterService {
         }
     }
 
+    public FindApplicationDetailResponse findApplicationDetail(Long userId, Long applicationId) {
+        Application application = applicationRepository.findById(applicationId)
+                .orElseThrow(ApplicationNotFoundException::new);
+        if (!userProjectRepository.existsByUserIdAndProjectId(userId, application.getProject().getId())) {
+            throw new AuthorizationException();
+        }
+
+        DeploymentHistory deploymentHistory = deploymentHistoryRepository.findByApplication(application).orElse(null);
+
+        return new FindApplicationDetailResponse(application, deploymentHistory);
+    }
 }
+

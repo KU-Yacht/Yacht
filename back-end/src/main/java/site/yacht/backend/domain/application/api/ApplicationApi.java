@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import site.yacht.backend.domain.application.api.request.ApplicationRegisterRequest;
+import site.yacht.backend.domain.application.api.response.FindApplicationDetailResponse;
 import site.yacht.backend.domain.application.domain.Region;
 import site.yacht.backend.domain.application.dto.ApplicationRegisterDto;
 import site.yacht.backend.domain.application.service.ApplicationRegisterService;
@@ -46,6 +47,13 @@ public class ApplicationApi {
                 .build();
 
         applicationRegisterService.registerApplication(applicationRegisterDto);
+    }
+
+    @GetMapping("/{applicationId}")
+    @Operation(summary = "애플리케이션 상세 정보 조회", description = "애플리케이션의 상세 정보를 조회합니다. 조회하는 사용자는 애플리케이션의 프로젝트에 속해있어야 합니다.")
+    public FindApplicationDetailResponse findApplicationDetail(@PathVariable Long applicationId,
+                                                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return applicationRegisterService.findApplicationDetail(userDetails.user().getId(), applicationId);
     }
 
 }
