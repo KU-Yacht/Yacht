@@ -1,3 +1,4 @@
+# ref: https://github.com/argoproj/argo-workflows/blob/main/examples/buildkit-template.yaml
 # SUMMARY:
 #
 # Build and push an image using Docker Buildkit.
@@ -169,3 +170,7 @@ spec:
         workingDir: /work2/cdk8s
         args:
           - synth
+    - name: deploy
+      resource:
+        action: apply
+        manifest: ./cdk8s/backend/dist/test.k8s.yaml
