@@ -24,7 +24,7 @@ import site.yacht.backend.global.error.exception.AuthorizationException;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class ApplicationRegisterService {
+public class ApplicationService {
 
     private final ApplicationRepository applicationRepository;
     private final TemplateRepository templateRepository;

@@ -48,7 +48,9 @@ public class WebSecurityConfig {
                                 AntPathRequestMatcher.antMatcher("/api-docs/**"),
                                 AntPathRequestMatcher.antMatcher("/"),
                                 AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/users/login"),
-                                AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/users/register")
+                                AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/users/register"),
+                                AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/histories"),
+                                AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/api/deployment/**")
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
