@@ -1,0 +1,29 @@
+type: AppService/v1
+services:
+  app:
+    name: spring-example
+    image: app
+    replicas: 1
+    namespace: default
+    resources:
+      cpu: 0.1
+      memory: 128Mi
+    ports:
+      - name: http
+        port: 8080
+    healthCheck:
+      type: http
+      httpPath: /health
+      port: 8080
+      interval: 10
+      startPeriod: 30
+images:
+  app:
+    dockerfile:
+      path: /Dockerfile
+
+routes:
+  - name: http
+    protocol: http
+    host:
+      scope: public
