@@ -1,0 +1,40 @@
+# servieaccount
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: argo-events
+  namespace: argo-events
+  
+# clusterrole
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: argo-events
+rules:
+- apiGroups:
+  - argoproj.io
+  resources:
+  - cronworkflows
+  - cronworkflows/finalizers
+  verbs:
+  - create
+  - get
+  - list
+  - watch
+  - update
+  - patch
+  - delete
+  
+# clusterrolebinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: argo-events
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: argo-events
+subjects:
+- kind: ServiceAccount
+  name: argo-events
+  namespace: argo-events

@@ -18,7 +18,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: argo-server
+            name: create-repo-svc
             port:
               number: 12000            
 status:
