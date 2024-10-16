@@ -47,6 +47,10 @@ spec:
             template: clone-cdk8s
           - name: make-deployment-yaml
             template: make-deployment-yaml
+            arguments:
+              parameters:
+                - name: image
+                  value: "{{workflow.parameters.image}}"
             depends: "clone-cdk8s"
           - name: make-svc-yaml
             template: make-svc-yaml
@@ -137,6 +141,9 @@ spec:
           - "https://github.com/KU-Yacht/Yacht"
           - .
     - name: make-deployment-yaml
+      inputs:
+        parameters:
+          - name: image
       script:
         image: debian:9.4
         command: [ bash ]
@@ -158,7 +165,7 @@ spec:
                   app: hello-k8s
               spec:
                 containers:
-                  - image: yacht24/spring-test:v0.0.13
+                  - image: {{inputs.parameters.image}}
                     name: hello-kubernetes
                     ports:
                       - containerPort: 8080
