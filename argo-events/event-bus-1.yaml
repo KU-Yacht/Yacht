@@ -1,0 +1,13 @@
+apiVersion: argoproj.io/v1alpha1
+kind: EventBus
+metadata:
+  name: default
+  namespace: argo-events
+spec:
+  jetstream:
+    version: v2.6.1
+    replicas: 3
+    persistence:
+      storageClassName: standard
+      accessMode: ReadWriteOnce
+      volumeSize: 1Gi
