@@ -14,6 +14,7 @@ spec:
       - name: image
         value: yacht24/spring-test:v0.0.1
   entrypoint: main
+  ttlSecondsAfterFinished: 300
   volumeClaimTemplates:
     - metadata:
         name: work
