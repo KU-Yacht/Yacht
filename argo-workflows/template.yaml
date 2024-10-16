@@ -6,7 +6,7 @@ spec:
   arguments:
     parameters:
       - name: repo
-        value: https://github.com/KU-Yacht/spring-example
+        value: https://github.com/KU-Yacht/nah
       - name: branch
         value: main
       - name: path
