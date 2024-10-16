@@ -1,0 +1,37 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: create-repo-sensor
+  namespace: argo-events
+spec:
+  dependencies:
+    - name: create-repo-dep
+      eventSourceName: create-repo-eventsource
+      eventName: create-repo-post
+  triggers:
+    - template:
+        name: trigger-yacht-workflow
+        argoWorkflow:
+          group: argoproj.io
+          version: v1alpha1
+          namespace: argo-events
+          operation: submit
+          source:
+            resource:
+              apiVersion: argoproj.io/v1alpha1
+              kind: Workflow
+              metadata:
+                generateName: yacht-workflow-
+              spec:
+                workflowTemplateRef:
+                  name: yacht
+                arguments:
+                  parameters:
+                    - name: repo
+                      value: "{{events.create-repo-dep.body.repoUrl}}"
+                    - name: branch
+                      value: main
+                    - name: path
+                      value: .
+                    - name: image
+                      value: yacht24/spring-test:v0.0.1
