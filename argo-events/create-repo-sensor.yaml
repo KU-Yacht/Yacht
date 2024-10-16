@@ -4,6 +4,7 @@ metadata:
   name: create-repo-sensor
   namespace: argo-events
 spec:
+  eventBusName: eventbus
   dependencies:
     - name: create-repo-dep
       eventSourceName: create-repo-eventsource

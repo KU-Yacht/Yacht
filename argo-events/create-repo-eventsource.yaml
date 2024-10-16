@@ -6,6 +6,7 @@ metadata:
   labels:
     eventsource-name: create-repo-eventsource  # 서비스 셀렉터와 일치하는 라벨 추가
 spec:
+  eventBusName: eventbus
   http:
     create-repo-post:
       endpoint: /create-repo
