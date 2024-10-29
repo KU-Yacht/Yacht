@@ -1,4 +1,4 @@
-package site.yacht.backend.global.config;
+package site.yacht.backend.global.config.swagger;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -6,6 +6,7 @@ import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -25,7 +26,7 @@ import java.util.stream.Collectors;
 public class SwaggerConfig {
 
     @Bean
-    public OpenAPI openAPI(BearerTokenProperties bearerTokenProperties) {
+    public OpenAPI openAPI(BearerTokenProperties bearerTokenProperties, ServerProperties serverProperties) {
         String jwtSchemeName = "Authorization";
 
         SecurityRequirement securityRequirement = new SecurityRequirement();
@@ -35,24 +36,41 @@ public class SwaggerConfig {
         securityScheme.name(jwtSchemeName)
                 .type(SecurityScheme.Type.HTTP)
                 .in(SecurityScheme.In.HEADER)
-                .scheme(GrantType.BEARER.getType());
+                .scheme(GrantType.BEARER.getType())
+                .description(getBearerTokenDescriptionFrom(bearerTokenProperties));
 
         Components components = new Components();
         components.addSecuritySchemes(jwtSchemeName, securityScheme);
 
+        List<Server> servers = getServersFrom(serverProperties);
+
+        return new OpenAPI()
+                .servers(servers)
+                .components(components)
+                .addSecurityItem(securityRequirement);
+    }
+
+    private String getBearerTokenDescriptionFrom(BearerTokenProperties bearerTokenProperties) {
         if (bearerTokenProperties.isEnabled() && !bearerTokenProperties.getTokens().isEmpty()) {
             List<BearerTokenProperties.BearerToken> tokens = bearerTokenProperties.getTokens();
 
-            String description = tokens.stream()
+            return tokens.stream()
                     .map(item -> String.format("**%s** %s", item.getName(), item.getToken()))
                     .collect(Collectors.joining("\n\n"));
-
-            securityScheme.description(description);
         }
+        return null;
+    }
 
-        return new OpenAPI()
-                .addSecurityItem(securityRequirement)
-                .components(components);
+    private List<Server> getServersFrom(ServerProperties serverProperties) {
+        return serverProperties.getServers().stream()
+                .map(information -> {
+                    Server server = new Server();
+                    server.setUrl(information.url());
+                    server.setDescription(information.description());
+                    return server;
+                })
+                .toList();
+
     }
 
 }

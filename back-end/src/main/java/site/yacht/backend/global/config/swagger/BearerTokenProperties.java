@@ -1,4 +1,4 @@
-package site.yacht.backend.global.config;
+package site.yacht.backend.global.config.swagger;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
