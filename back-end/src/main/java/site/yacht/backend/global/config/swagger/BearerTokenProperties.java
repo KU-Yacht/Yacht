@@ -14,10 +14,6 @@ public class BearerTokenProperties {
     private final boolean enabled;
     private final List<BearerToken> tokens;
 
-    @Getter
-    @RequiredArgsConstructor
-    public static class BearerToken {
-        private final String name;
-        private final String token;
+    public record BearerToken(String name, String token) {
     }
 }

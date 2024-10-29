@@ -51,17 +51,21 @@ public class SwaggerConfig {
     }
 
     private String getBearerTokenDescriptionFrom(BearerTokenProperties bearerTokenProperties) {
-        if (bearerTokenProperties.isEnabled() && !bearerTokenProperties.getTokens().isEmpty()) {
-            List<BearerTokenProperties.BearerToken> tokens = bearerTokenProperties.getTokens();
-
-            return tokens.stream()
-                    .map(item -> String.format("**%s** %s", item.getName(), item.getToken()))
-                    .collect(Collectors.joining("\n\n"));
+        if (!bearerTokenProperties.isEnabled() || bearerTokenProperties.getTokens() == null) {
+            return null;
         }
-        return null;
+
+        List<BearerTokenProperties.BearerToken> tokens = bearerTokenProperties.getTokens();
+        return tokens.stream()
+                .map(item -> String.format("**%s** %s", item.name(), item.token()))
+                .collect(Collectors.joining("\n\n"));
     }
 
     private List<Server> getServersFrom(ServerProperties serverProperties) {
+        if (serverProperties.getServers() == null) {
+            return List.of();
+        }
+
         return serverProperties.getServers().stream()
                 .map(information -> {
                     Server server = new Server();
