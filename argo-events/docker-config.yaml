@@ -1,0 +1,11 @@
+apiVersion: v1
+data:
+  config.json: eyJhdXRocyI6IHsiaHR0cHM6Ly9pbmRleC5kb2NrZXIuaW8vdjEvIjogeyJhdXRoIjogImVXRmphSFF5TkRwa1kydHlYM0JoZEY5elJYcElZbVZ2Y0ZoRlZEUmplRlJsUW5sNVRGaGFkRGhGUkZFPSJ9fX0=
+kind: Secret
+metadata:
+  creationTimestamp: "2024-10-14T14:29:59Z"
+  name: docker-config
+  namespace: argo-events
+  resourceVersion: "2801791"
+  uid: d3306948-314d-4d8d-bd8a-12f4597f841d
+type: Opaque
