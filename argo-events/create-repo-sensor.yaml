@@ -31,10 +31,14 @@ spec:
                 arguments:
                   parameters:
                     - name: repo
-                      value: https://github.com/KU-Yacht/spring-example
                     - name: branch
                       value: main
                     - name: path
                       value: .
                     - name: image
                       value: yacht24/spring-test:v0.0.1
+          parameters:
+            - src:
+                dependencyName: create-repo-dep
+                dataKey: body.repoUrl
+              dest: spec.arguments.parameters.0.value  # repo 파라미터에 동적으로 전달
