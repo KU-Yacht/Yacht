@@ -17,7 +17,7 @@ spec:
         argoWorkflow:
           group: argoproj.io
           version: v1alpha1
-          namespace: argo-events
+          namespace: argo
           operation: submit
           source:
             resource:
@@ -31,7 +31,7 @@ spec:
                 arguments:
                   parameters:
                     - name: repo
-                      value: "{{events.create-repo-dep.body.repoUrl}}"
+                      value: https://github.com/KU-Yacht/spring-example
                     - name: branch
                       value: main
                     - name: path
