@@ -46,6 +46,7 @@ rules:
   - create
   - update
   - delete
+  - patch
 ---  
 # clusterrolebinding
 apiVersion: rbac.authorization.k8s.io/v1
