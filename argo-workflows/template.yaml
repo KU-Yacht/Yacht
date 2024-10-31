@@ -35,6 +35,8 @@ spec:
                   value: "{{workflow.parameters.repo}}"
                 - name: branch
                   value: "{{workflow.parameters.branch}}"
+                - name: path
+                  value: "{{workflow.parameters.path}}"
           - name: build-and-push
             template: build-and-push
             arguments:
@@ -75,12 +77,13 @@ spec:
         parameters:
           - name: repo
           - name: branch
+          - name: path
       container:
         volumeMounts:
           - mountPath: /work
             name: work
         image: alpine/git:v2.26.2
-        workingDir: /work
+        workingDir: /work/{{inputs.parameters.path}}
         args:
           - clone
           - --depth
