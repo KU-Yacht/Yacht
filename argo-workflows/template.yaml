@@ -48,6 +48,10 @@ spec:
             depends: "clone-application"
           - name: clone-cdk8s
             template: clone-cdk8s
+            arguments:
+              parameters:
+                - name: repo
+                  value: "{{workflow.parameters.repo}}"
           - name: make-deployment-yaml
             template: make-deployment-yaml
             arguments:
@@ -133,6 +137,9 @@ spec:
         securityContext:
           privileged: true
     - name: clone-cdk8s
+      inputs:
+        parameters:
+          - name: repo
       container:
         image: alpine/git:v2.26.2
         args:
@@ -142,7 +149,7 @@ spec:
           - --branch
           - "main"
           - --single-branch
-          - "https://github.com/KU-Yacht/Yacht"
+          - "{{inputs.parameters.repo}}"
           - .
     - name: make-deployment-yaml
       inputs:
@@ -208,4 +215,3 @@ spec:
       resource:
         action: apply
         manifest: "{{inputs.parameters.svc-yaml}}"
-
