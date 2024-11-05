@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+  creationTimestamp: "2024-10-11T12:16:22Z"
+  generation: 5
+  name: ingress-workflow
+  namespace: argo
+  resourceVersion: "1956557"
+  uid: 5e3ddb60-2f32-4982-8be7-a876d34bd8f6
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /workflow(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: argo-server
+            port:
+              number: 2746            
+status:
+  loadBalancer:
+    ingress:
+    - ip: 10.233.41.91

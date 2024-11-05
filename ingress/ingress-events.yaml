@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+  generation: 5
+  name: ingress-events
+  namespace: argo-events
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /events(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: create-repo-svc
+            port:
+              number: 12000            
+status:
+  loadBalancer:
+    ingress:
+    - ip: 10.233.41.91
