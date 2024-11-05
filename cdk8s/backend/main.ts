@@ -1,5 +1,5 @@
 import { Construct } from 'constructs';
-import { App, Chart, ChartProps } from 'cdk8s';
+import { App, Chart, ChartProps, YamlOutputType } from 'cdk8s';
 import {IntOrString, KubeDeployment, KubeService} from "./imports/k8s";
 // const yaml = require('js-yaml');
 // const fs = require('fs');
@@ -43,9 +43,8 @@ export class MyChart extends Chart {
   }
 }
 
-// ts 이거 env받아와서 넣기
-// const doc = yaml.load(fs.readFileSync('../.deploy/deploy.yaml', 'utf8'));
-
-const app = new App();
+const app = new App({
+  yamlOutputType: YamlOutputType.FILE_PER_RESOURCE,
+});
 new MyChart(app, "test");
 app.synth();

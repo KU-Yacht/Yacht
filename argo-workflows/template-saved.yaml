@@ -1,35 +1,7 @@
-# ref: https://github.com/argoproj/argo-workflows/blob/main/examples/buildkit-template.yaml
-# SUMMARY:
-#
-# Build and push an image using Docker Buildkit.
-#
-# DESCRIPTION:
-#
-# This does not need privileged access, unlike Docker in Docker (DIND). It has three stages:
-#
-# * clone the Git repository
-# * build the binary
-# * build and push the image containing the binary
-#
-# USAGE:
-#
-# Publishing images requires an access token. For hub.docker.com you can create one at https://hub.docker.com/settings/security
-# This needs to be mounted as `$DOCKER_CONFIG/config.json`. To do this, you'll need to create a secret as follows:
-#
-#    export DOCKER_USERNAME=******
-#    export DOCKER_TOKEN=******
-#    kubectl create secret generic docker-config --from-literal="config.json={\"auths\": {\"https://index.docker.io/v1/\": {\"auth\": \"$(echo -n $DOCKER_USERNAME:$DOCKER_TOKEN|base64)\"}}}"
-#
-# REFERENCES:
-#
-# * https://github.com/moby/buildkit#expose-buildkit-as-a-tcp-service
-# * https://blog.alexellis.io/building-containers-without-docker/
-# * https://hub.docker.com/r/moby/buildkit
-#
 apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
-  name: yacht
+  name: yacht-test
 spec:
   arguments:
     parameters:
@@ -42,15 +14,7 @@ spec:
       - name: image
         value: yacht24/spring-test:v0.0.1
   entrypoint: main
-  # We use a volume claim template so that we can have a shared workspace.
   volumeClaimTemplates:
-    - metadata:
-        name: work
-      spec:
-        accessModes: [ "ReadWriteOnce" ]
-        resources:
-          requests:
-            storage: 64Mi
     - metadata:
         name: work2
       spec:
@@ -62,99 +26,28 @@ spec:
     - name: main
       dag:
         tasks:
-          #          - name: clone-application
-          #            template: clone-application
-          #            arguments:
-          #              parameters:
-          #                - name: repo
-          #                  value: "{{workflow.parameters.repo}}"
-          #                - name: branch
-          #                  value: "{{workflow.parameters.branch}}"
-          #          - name: build-and-push
-          #            template: build-and-push
-          #            arguments:
-          #              parameters:
-          #                - name: path
-          #                  value: "{{workflow.parameters.path}}"
-          #                - name: image
-          #                  value: "{{workflow.parameters.image}}"
-          #            depends: "clone-application"
           - name: clone-cdk8s
             template: clone-cdk8s
+          - name: setup-node
+            template: setup-node
+            depends: "clone-cdk8s"
           - name: make-deploy-yaml
             template: make-deploy-yaml
-            depends: "clone-cdk8s"
-          - name: deploy
-            template: deploy
+            depends: "setup-node"
+          - name: deploy-yaml
+            template: deploy-yaml
             arguments:
               parameters:
-                - name: deployment-yaml
-                  #                  value: "{{tasks.make-deploy-yaml.outputs.parameters.result-yaml}}"
-                  value: "{{tasks.make-deploy-yaml.outputs.result}}"
-            depends: "make-deploy-yaml" # "build-and-push && make-deploy-yaml"
-    #    - name: clone-application
-    #      inputs:
-    #        parameters:
-    #          - name: repo
-    #          - name: branch
-    #      container:
-    #        volumeMounts:
-    #          - mountPath: /work
-    #            name: work
-    #        image: alpine/git:v2.26.2
-    #        workingDir: /work
-    #        # Do a shallow clone, which is the fastest way to clone, by using the
-    #        # --depth, --branch, and --single-branch options
-    #        args:
-    #          - clone
-    #          - --depth
-    #          - "1"
-    #          - --branch
-    #          - "{{inputs.parameters.branch}}"
-    #          - --single-branch
-    #          - "{{inputs.parameters.repo}}"
-    #          - .
-    #    - name: build-and-push
-    #      inputs:
-    #        parameters:
-    #          - name: path
-    #          - name: image
-    #      # Mount the configuration so we can push the image.
-    #      # This should create the /.docker/config.json file.
-    #      volumes:
-    #        - name: docker-config
-    #          secret:
-    #            secretName: docker-config
-    #      container:
-    #        readinessProbe:
-    #          exec:
-    #            command: [ sh, -c, "buildctl debug workers" ]
-    #        image: moby/buildkit:v0.9.3-rootless
-    #        volumeMounts:
-    #          - name: work
-    #            mountPath: /work
-    #          - name: docker-config
-    #            mountPath: /.docker
-    #        workingDir: /work/{{inputs.parameters.path}}
-    #        env:
-    #          - name: BUILDKITD_FLAGS
-    #            value: --oci-worker-no-process-sandbox
-    #          - name: DOCKER_CONFIG
-    #            value: /.docker
-    #        command:
-    #          - buildctl-daemonless.sh
-    #        args:
-    #          - build
-    #          - --frontend
-    #          - dockerfile.v0
-    #          - --local
-    #          - context=.
-    #          - --local
-    #          - dockerfile=.
-    #          - --output
-    #          - type=image,name=docker.io/{{inputs.parameters.image}},push=true
-    #        securityContext:
-    #          privileged: true
+              - name: deployment-yaml
+                value: "{{tasks.make-deploy-yaml.outputs.parameters.deployment-yaml}}"
+            depends: "make-deploy-yaml"
+          - name: service-yaml
+            template: service-yaml
+            arguments:
+              parameters:
+                - name: service-yaml
+                  value: "{{tasks.make-deploy-yaml.outputs.parameters.service-yaml}}"
+            depends: "make-deploy-yaml"
     - name: clone-cdk8s
       container:
         volumeMounts:
@@ -162,8 +55,6 @@ spec:
             name: work2
         image: alpine/git:v2.26.2
         workingDir: /work2
-        # Do a shallow clone, which is the fastest way to clone, by using the
-        # --depth, --branch, and --single-branch options
         args:
           - clone
           - --depth
@@ -173,75 +64,43 @@ spec:
           - --single-branch
           - "https://github.com/KU-Yacht/Yacht"
           - .
-    - name: make-deploy-yaml
-      script:
+    - name: setup-node
+      container:
         volumeMounts:
           - mountPath: /work2
             name: work2
-        #        image: ghcr.io/akuity/cdk8s-cmp-typescript:latest
-        #        workingDir: /work2/cdk8s/backend
-        image: debian:9.4
-        command: [ bash ]
-        #        command: ["cdk8s"]
-        #        args: ["synth", "--stdout"]
-        source: |
-          cat << EOF
-          apiVersion: v1
-          kind: Service
-          metadata:
-            name: spring-service
-            namespace: argo
-          spec:
-            ports:
-              - port: 8080
-                targetPort: 8080
-            selector:
-              app: hello-k8s
-            type: ClusterIP
-          ---
-          apiVersion: apps/v1
-          kind: Deployment
-          metadata:
-            namespace: argo
-            name: spring-deployment
-          spec:
-            replicas: 1
-            selector:
-              matchLabels:
-                app: hello-k8s
-            template:
-              metadata:
-                labels:
-                  app: hello-k8s
-              spec:
-                containers:
-                  - image: yacht24/spring-test:v0.0.13
-                    name: hello-kubernetes
-                    ports:
-                      - containerPort: 8080
-          EOF
-    #      - name: make-deploy-yaml
-    #        container:
-    #          volumeMounts:
-    #            - mountPath: /work2
-    #              name: work2
-    #          workingDir: /work2/cdk8s/backend
-    #          image: brennerm/cdk8s:latest
-    #          args:
-    #            - synth
-    #        outputs:
-    #          parameters:
-    #          - name: result-yaml
-    #            valueFrom:
-    #              path: /work2/cdk8s/backend/dist/test.k8s.yaml
-    - name: deploy
+        workingDir: /work2/cdk8s/backend
+        image: node:latest
+        command: [ sh, -c ]
+        args: [ "npm install" ]
+    - name: make-deploy-yaml
+      container:
+        volumeMounts:
+          - mountPath: /work2
+            name: work2
+        workingDir: /work2/cdk8s/backend
+        image: brennerm/cdk8s:latest
+        args:
+          - synth
+      outputs:
+        parameters:
+        - name: deployment-yaml
+          valueFrom:
+            path: /work2/cdk8s/backend/dist/Deployment.*.k8s.yaml
+        - name: service-yaml
+          valueFrom:
+            path: /work2/cdk8s/backend/dist/Service.*.k8s.yaml
+    - name: deployment-yaml
       inputs:
         parameters:
-          - name: deployment-yaml
-      #      container:
-      #        image: alpine:latest
-      #        command: [ sh, -c ]
-      #        args: [ "echo result was: {{inputs.parameters.deployment-yaml}}" ]
+        - name: deployment-yaml
       resource:
         action: apply
         manifest: "{{inputs.parameters.deployment-yaml}}"
+    - name: service-yaml
+      inputs:
+        parameters:
+          - name: service-yaml
+      resource:
+        action: apply
+        manifest: "{{inputs.parameters.service-yaml}}"
