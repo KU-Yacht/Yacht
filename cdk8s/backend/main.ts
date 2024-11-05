@@ -39,7 +39,7 @@ export class MyChart extends Chart {
             containers: [
               {
                 name: 'hello-kubernetes',
-                image: 'yacht24/spring-test:v0.0.13',
+                image: process.env.DOCKER_IMAGE,
                 ports: [ { containerPort: 8080 } ]
               }
             ]

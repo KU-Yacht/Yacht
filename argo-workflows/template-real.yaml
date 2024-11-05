@@ -57,6 +57,10 @@ spec:
             depends: "clone-cdk8s"
           - name: make-deploy-yaml
             template: make-deploy-yaml
+            arguments:
+              parameters:
+                - name: image
+                  value: "{{workflow.parameters.image}}"
             depends: "setup-node"
           - name: deployment-yaml
             template: deployment-yaml
@@ -157,7 +161,13 @@ spec:
         command: [ sh, -c ]
         args: [ "npm install" ]
     - name: make-deploy-yaml
+      inputs:
+        parameters:
+          - name: image
       container:
+        env:
+          - name: DOCKER_IMAGE
+            value: "{{inputs.parameters.image}}"
         volumeMounts:
           - mountPath: /work2
             name: work2
