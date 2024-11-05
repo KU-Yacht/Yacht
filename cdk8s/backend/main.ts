@@ -12,6 +12,9 @@ export class MyChart extends Chart {
     const label = { app: 'hello-k8s' };
 
     new KubeService(this, 'service', {
+      metadata: {
+        name: "appservice",
+      },
       spec: {
         type: 'ClusterIP',
         ports: [ { port: 8080, targetPort: IntOrString.fromNumber(8080) } ],
@@ -20,6 +23,9 @@ export class MyChart extends Chart {
     });
 
     new KubeDeployment(this, 'deployment', {
+      metadata: {
+        name: "appservice",
+      },
       spec: {
         replicas: 1,
         selector: {
