@@ -13,18 +13,20 @@ export class MyChart extends Chart {
 
     new KubeService(this, 'service', {
       metadata: {
-        name: "appservice",
+        name: "spring-service",
+        namespace: "argo"
       },
       spec: {
-        type: 'ClusterIP',
-        ports: [ { port: 8080, targetPort: IntOrString.fromNumber(8080) } ],
+        type: 'NodePort',
+        ports: [ { port: 8080, targetPort: IntOrString.fromNumber(8080), nodePort: 30007 } ],
         selector: label
       }
     });
 
     new KubeDeployment(this, 'deployment', {
       metadata: {
-        name: "appservice",
+        name: "spring-deployment",
+        namespace: "argo"
       },
       spec: {
         replicas: 1,
@@ -37,7 +39,7 @@ export class MyChart extends Chart {
             containers: [
               {
                 name: 'hello-kubernetes',
-                image: 'paulbouwer/hello-kubernetes:1.7',
+                image: 'yacht24/spring-test:v0.0.13',
                 ports: [ { containerPort: 8080 } ]
               }
             ]
