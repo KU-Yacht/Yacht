@@ -34,8 +34,8 @@ spec:
           - name: make-deploy-yaml
             template: make-deploy-yaml
             depends: "setup-node"
-          - name: deploy-yaml
-            template: deploy-yaml
+          - name: deployment-yaml
+            template: deployment-yaml
             arguments:
               parameters:
               - name: deployment-yaml
@@ -86,10 +86,10 @@ spec:
         parameters:
         - name: deployment-yaml
           valueFrom:
-            path: /work2/cdk8s/backend/dist/Deployment.*.k8s.yaml
+            path: /work2/cdk8s/backend/dist/Deployment.appservice.k8s.yaml
         - name: service-yaml
           valueFrom:
-            path: /work2/cdk8s/backend/dist/Service.*.k8s.yaml
+            path: /work2/cdk8s/backend/dist/Service.appservice.k8s.yaml
     - name: deployment-yaml
       inputs:
         parameters:
