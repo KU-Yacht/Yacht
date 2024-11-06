@@ -217,6 +217,14 @@ spec:
             value: "{{inputs.parameters.cpu}}"
           - name: MEMORY
             value: "{{inputs.parameters.memory}}"
+          script: |
+            echo "DOCKER_IMAGE: $DOCKER_IMAGE"
+            echo "PORT: $PORT"
+            echo "APP_NAME: $APP_NAME"
+            echo "REPLICAS: $REPLICAS"
+            echo "CPU: $CPU"
+            echo "MEMORY: $MEMORY"
+            synth
         volumeMounts:
           - mountPath: /work2
             name: work2
