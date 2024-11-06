@@ -198,6 +198,11 @@ spec:
       inputs:
         parameters:
           - name: image
+          - name: port
+          - name: app_name
+          - name: replicas
+          - name: cpu
+          - name: memory
       container:
         env:
           - name: DOCKER_IMAGE
