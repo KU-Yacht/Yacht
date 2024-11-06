@@ -76,6 +76,16 @@ spec:
                 - name: svc-yaml
                   value: "{{tasks.make-svc-yaml.outputs.result}}"
             depends: "build-and-push && make-svc-yaml"
+          - name: make-ingress-yaml
+            template: make-ingress-yaml
+            depends: "deploy-svc"
+          - name: deploy-ingress
+            template: deploy-ingress
+            arguments:
+              parameters:
+                - name: ingress-yaml
+                  value: "{{tasks.make-ingress-yaml.outputs.result}}"
+            depends: "make-ingress-yaml"
     - name: clone-application
       inputs:
         parameters:
@@ -215,3 +225,39 @@ spec:
       resource:
         action: apply
         manifest: "{{inputs.parameters.svc-yaml}}"
+    - name: make-ingress-yaml
+      script:
+        image: debian:9.4
+        command: [ bash ]
+        source: |
+          cat << EOF
+          apiVersion: networking.k8s.io/v1
+          kind: Ingress
+          metadata:
+            name: spring-ingress
+            namespace: argo
+            annotations:
+              nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+              nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+              nginx.ingress.kubernetes.io/rewrite-target: /$2
+              nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+          spec:
+            ingressClassName: nginx
+            rules:
+            - http:
+                paths:
+                - path: /spring(/|$)(.*)
+                  pathType: Prefix
+                  backend:
+                    service:
+                      name: spring-service
+                      port:
+                        number: 12000
+          EOF
+    - name: deploy-ingress
+      inputs:
+        parameters:
+          - name: ingress-yaml
+      resource:
+        action: apply
+        manifest: "{{inputs.parameters.ingress-yaml}}"
