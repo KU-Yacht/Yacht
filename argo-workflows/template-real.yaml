@@ -52,6 +52,10 @@ spec:
             depends: "clone-application"
           - name: clone-cdk8s
             template: clone-cdk8s
+              arguments:
+                parameters:
+                  - name: repo
+                    value: "{{workflow.parameters.repo}}"
           - name: setup-node
             template: setup-node
             depends: "clone-cdk8s"
