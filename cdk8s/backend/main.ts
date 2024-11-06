@@ -1,5 +1,5 @@
 import { Construct } from 'constructs';
-import { App, Chart, ChartProps } from 'cdk8s';
+import { App, Chart, ChartProps, YamlOutputType } from 'cdk8s';
 import {IntOrString, KubeDeployment, KubeService} from "./imports/k8s";
 // const yaml = require('js-yaml');
 // const fs = require('fs');
@@ -12,14 +12,22 @@ export class MyChart extends Chart {
     const label = { app: 'hello-k8s' };
 
     new KubeService(this, 'service', {
+      metadata: {
+        name: "spring-service",
+        namespace: "argo"
+      },
       spec: {
-        type: 'ClusterIP',
-        ports: [ { port: 8080, targetPort: IntOrString.fromNumber(8080) } ],
+        type: 'NodePort',
+        ports: [ { port: 8080, targetPort: IntOrString.fromNumber(8080), nodePort: 30007 } ],
         selector: label
       }
     });
 
     new KubeDeployment(this, 'deployment', {
+      metadata: {
+        name: "spring-deployment",
+        namespace: "argo"
+      },
       spec: {
         replicas: 1,
         selector: {
@@ -31,7 +39,7 @@ export class MyChart extends Chart {
             containers: [
               {
                 name: 'hello-kubernetes',
-                image: 'paulbouwer/hello-kubernetes:1.7',
+                image: process.env.DOCKER_IMAGE,
                 ports: [ { containerPort: 8080 } ]
               }
             ]
@@ -43,9 +51,8 @@ export class MyChart extends Chart {
   }
 }
 
-// ts 이거 env받아와서 넣기
-// const doc = yaml.load(fs.readFileSync('../.deploy/deploy.yaml', 'utf8'));
-
-const app = new App();
+const app = new App({
+  yamlOutputType: YamlOutputType.FILE_PER_RESOURCE,
+});
 new MyChart(app, "test");
 app.synth();
