@@ -209,7 +209,7 @@ spec:
           - name: service-yaml
       resource:
         action: apply
-        manifest: "{{inputs.parameters.svc-yaml}}"
+        manifest: "{{inputs.parameters.service-yaml}}"
     - name: make-ingress-yaml
       script:
         image: debian:9.4
