@@ -36,10 +36,10 @@ public class DeploymentApi {
     public String deployApplication(@RequestBody DeployApplicationRequest request) {
         boolean deploy = deployService.deploy(request);
         if (deploy) {
-            return "{isSuccess: true}";
+            return "{\"isSuccess\": true}";
         }
         else {
-            return "{isSuccess: false}";
+            return "{\"isSuccess\": false}";
         }
     }
 }
