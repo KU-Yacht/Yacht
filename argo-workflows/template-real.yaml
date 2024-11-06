@@ -202,15 +202,15 @@ spec:
         env:
           - name: DOCKER_IMAGE
             value: "{{inputs.parameters.image}}"
-            name: PORT
+          - name: PORT
             value: "{{inputs.parameters.port}}"
-            name: APP_NAME
+          - name: APP_NAME
             value: "{{inputs.parameters.app_name}}"
-            name: REPLICAS
+          - name: REPLICAS
             value: "{{inputs.parameters.replicas}}"
-            name: CPU
+          - name: CPU
             value: "{{inputs.parameters.cpu}}"
-            name: MEMORY
+          - name: MEMORY
             value: "{{inputs.parameters.memory}}"
         volumeMounts:
           - mountPath: /work2
