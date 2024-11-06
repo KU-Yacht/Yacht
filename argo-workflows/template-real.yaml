@@ -80,16 +80,13 @@ spec:
                 - name: service-yaml
                   value: "{{tasks.make-deploy-yaml.outputs.parameters.service-yaml}}"
             depends: "make-deploy-yaml && build-and-push"
-          - name: make-ingress-yaml
-            template: make-ingress-yaml
-            depends: "deployment-yaml"
-          - name: deploy-ingress
-            template: deploy-ingress
+          - name: ingress-yaml
+            template: ingress-yaml
             arguments:
               parameters:
                 - name: ingress-yaml
-                  value: "{{tasks.make-ingress-yaml.outputs.result}}"
-            depends: "make-ingress-yaml"
+                  value: "{{tasks.make-deploy-yaml.outputs.parameters.ingress-yaml}}"
+            depends: "make-deploy-yaml && build-and-push"
     - name: clone-application
       inputs:
         parameters:
@@ -200,6 +197,9 @@ spec:
         - name: service-yaml
           valueFrom:
             path: /work2/cdk8s/backend/dist/Service.spring-service.k8s.yaml
+        - name: ingress-yaml
+          valueFrom:
+            path: /work2/cdk8s/backend/dist/Ingress.spring-ingress.k8s.yaml
     - name: deployment-yaml
       inputs:
         parameters:
@@ -214,39 +214,11 @@ spec:
       resource:
         action: apply
         manifest: "{{inputs.parameters.service-yaml}}"
-    - name: make-ingress-yaml
-      script:
-        image: debian:9.4
-        command: [ bash ]
-        source: |
-          cat << EOF
-          apiVersion: networking.k8s.io/v1
-          kind: Ingress
-          metadata:
-            name: spring-ingress
-            namespace: argo
-            annotations:
-              nginx.ingress.kubernetes.io/backend-protocol: HTTPS
-              nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-              nginx.ingress.kubernetes.io/rewrite-target: /$2
-              nginx.ingress.kubernetes.io/ssl-passthrough: "true"
-          spec:
-            ingressClassName: nginx
-            rules:
-            - http:
-                paths:
-                - path: /spring(/|$)(.*)
-                  pathType: Prefix
-                  backend:
-                    service:
-                      name: spring-service
-                      port:
-                        number: 12000
-          EOF
-    - name: deploy-ingress
+    - name: ingress-yaml
       inputs:
         parameters:
           - name: ingress-yaml
+            value: "{{tasks.make-deploy-yaml.outputs.parameters.ingress-yaml}}"
       resource:
         action: apply
         manifest: "{{inputs.parameters.ingress-yaml}}"
