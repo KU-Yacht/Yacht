@@ -78,7 +78,7 @@ spec:
             depends: "make-deploy-yaml && build-and-push"
           - name: make-ingress-yaml
             template: make-ingress-yaml
-            depends: "deploy-svc"
+            depends: "deployment-yaml"
           - name: deploy-ingress
             template: deploy-ingress
             arguments:
