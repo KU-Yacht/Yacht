@@ -218,7 +218,6 @@ spec:
       inputs:
         parameters:
           - name: ingress-yaml
-            value: "{{tasks.make-deploy-yaml.outputs.parameters.ingress-yaml}}"
       resource:
         action: apply
         manifest: "{{inputs.parameters.ingress-yaml}}"
