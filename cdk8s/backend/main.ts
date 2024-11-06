@@ -10,26 +10,27 @@ export class MyChart extends Chart {
 
     // define resources here
     const label = { app: 'hello-k8s' };
+    const appName = process.env.APP_NAME || 'default-app-name';
 
     new KubeService(this, 'service', {
       metadata: {
-        name: "spring-service",
+        name: "${appName}-service",
         namespace: "argo"
       },
       spec: {
         type: 'ClusterIP',
-          ports: [{ port: 8080, targetPort: IntOrString.fromNumber(8080) }],
+          ports: [{ port: 8080, targetPort: IntOrString.fromNumber(process.env.PORT) }],
         selector: label
       }
     });
 
     new KubeDeployment(this, 'deployment', {
       metadata: {
-        name: "spring-deployment",
+        name: "${appName}-deployment",
         namespace: "argo"
       },
       spec: {
-        replicas: 1,
+        replicas: process.env.replicas,
         selector: {
           matchLabels: label
         },
@@ -40,7 +41,7 @@ export class MyChart extends Chart {
               {
                 name: 'hello-kubernetes',
                 image: process.env.DOCKER_IMAGE,
-                ports: [ { containerPort: 8080 } ]
+                ports: [ { containerPort: process.env.PORT } ]
               }
             ]
           }
@@ -50,7 +51,7 @@ export class MyChart extends Chart {
       
     new KubeIngress(this, 'ingress', {
       metadata: {
-        name: 'spring-ingress',
+        name: '${appName}-ingress',
         namespace: 'argo',
         annotations: {
           'nginx.ingress.kubernetes.io/backend-protocol': 'HTTP',
@@ -66,11 +67,11 @@ export class MyChart extends Chart {
             http: {
               paths: [
                 {
-                  path: '/spring(/|$)(.*)',
+                  path: '/${appName}(/|$)(.*)',
                   pathType: 'Prefix',
                   backend: {
                     service: {
-                      name: 'spring-service',
+                      name: '${appName}-service',
                       port: { number: 8080 },
                     },
                   },

@@ -13,6 +13,16 @@ spec:
         value: .
       - name: image
         value: yacht24/spring-test:v0.0.1
+      - name: port
+        value: 8090
+      - name: app_name
+        value: spring
+      - name: replicas
+        value: 1
+      - name: cpu
+        value: 0.2
+      - name: memory
+        value: 0.6
   entrypoint: main
   volumeClaimTemplates:
     - metadata:
@@ -65,6 +75,16 @@ spec:
               parameters:
                 - name: image
                   value: "{{workflow.parameters.image}}"
+                - name: port
+                  value: "{{workflow.parameters.port}}"
+                - name: app_name
+                  value: "{{workflow.parameters.app_name}}"
+                - name: replicas
+                  value: "{{workflow.parameters.replicas}}"
+                - name: cpu
+                  value: "{{workflow.parameters.cpu}}"
+                - name: memory
+                  value: "{{workflow.parameters.memory}}"                                                                        
             depends: "setup-node"
           - name: deployment-yaml
             template: deployment-yaml
@@ -182,6 +202,16 @@ spec:
         env:
           - name: DOCKER_IMAGE
             value: "{{inputs.parameters.image}}"
+            name: PORT
+            value: "{{inputs.parameters.port}}"
+            name: APP_NAME
+            value: "{{inputs.parameters.app_name}}"
+            name: REPLICAS
+            value: "{{inputs.parameters.replicas}}"
+            name: CPU
+            value: "{{inputs.parameters.cpu}}"
+            name: MEMORY
+            value: "{{inputs.parameters.memory}}"
         volumeMounts:
           - mountPath: /work2
             name: work2
