@@ -84,7 +84,7 @@ spec:
                 - name: cpu
                   value: "{{workflow.parameters.cpu}}"
                 - name: memory
-                  value: "{{workflow.parameters.memory}}"                                                                        
+                  value: "{{workflow.parameters.memory}}"                                                             
             depends: "setup-node"
           - name: deployment-yaml
             template: deployment-yaml
