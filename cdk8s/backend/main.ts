@@ -12,7 +12,7 @@ export class MyChart extends Chart {
     const label = { app: 'hello-k8s' };
     const appName = process.env.APP_NAME || 'default-app-name';
     const port = parseInt(process.env.PORT || "8080", 10); 
-    const replicas = parseInt(process.env.replicas || "1", 10); 
+    const replicas = parseInt(process.env.REPLICAS || "1", 10); 
 
     new KubeService(this, 'service', {
       metadata: {
