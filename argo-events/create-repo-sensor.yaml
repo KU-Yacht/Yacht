@@ -34,6 +34,11 @@ spec:
                     - name: branch
                     - name: path
                     - name: image
+                    - name: port
+                    - name: app_name
+                    - name: replicas
+                    - name: cpu
+                    - name: memory
           parameters:
             - src:
                 dependencyName: create-repo-dep
@@ -51,3 +56,23 @@ spec:
                 dependencyName: create-repo-dep
                 dataKey: body.image
               dest: spec.arguments.parameters.3.value
+            - src:
+                dependencyName: create-repo-dep
+                dataKey: body.port
+              dest: spec.arguments.parameters.4.value
+            - src:
+                dependencyName: create-repo-dep
+                dataKey: body.appName
+              dest: spec.arguments.parameters.5.value
+            - src:
+                dependencyName: create-repo-dep
+                dataKey: body.replicas
+              dest: spec.arguments.parameters.6.value
+            - src:
+                dependencyName: create-repo-dep
+                dataKey: body.cpu
+              dest: spec.arguments.parameters.7.value
+            - src:
+                dependencyName: create-repo-dep
+                dataKey: body.memory
+              dest: spec.arguments.parameters.8.value
