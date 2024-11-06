@@ -11,6 +11,8 @@ export class MyChart extends Chart {
     // define resources here
     const label = { app: 'hello-k8s' };
     const appName = process.env.APP_NAME || 'default-app-name';
+    const port = parseInt(process.env.PORT || "8080", 10); 
+    const replicas = parseInt(process.env.replicas || "1", 10); 
 
     new KubeService(this, 'service', {
       metadata: {
@@ -19,7 +21,7 @@ export class MyChart extends Chart {
       },
       spec: {
         type: 'ClusterIP',
-          ports: [{ port: 8080, targetPort: IntOrString.fromNumber(process.env.PORT) }],
+          ports: [{ port: 8080, targetPort: IntOrString.fromNumber(port) }],
         selector: label
       }
     });
@@ -30,7 +32,7 @@ export class MyChart extends Chart {
         namespace: "argo"
       },
       spec: {
-        replicas: process.env.replicas,
+        replicas: replicas,
         selector: {
           matchLabels: label
         },
@@ -41,7 +43,7 @@ export class MyChart extends Chart {
               {
                 name: 'hello-kubernetes',
                 image: process.env.DOCKER_IMAGE,
-                ports: [ { containerPort: process.env.PORT } ]
+                ports: [ { containerPort: port } ]
               }
             ]
           }
