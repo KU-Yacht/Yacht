@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class DeployApplicationRequest {
+
+    private Long applicationId;
     private String region;
     private String name;
     private String description;
