@@ -14,7 +14,7 @@ export class MyChart extends Chart {
 
     new KubeService(this, 'service', {
       metadata: {
-        name: "${appName}-service",
+        name: `${appName}-service`,
         namespace: "argo"
       },
       spec: {
@@ -26,7 +26,7 @@ export class MyChart extends Chart {
 
     new KubeDeployment(this, 'deployment', {
       metadata: {
-        name: "${appName}-deployment",
+        name: `${appName}-deployment`,
         namespace: "argo"
       },
       spec: {
@@ -51,7 +51,7 @@ export class MyChart extends Chart {
       
     new KubeIngress(this, 'ingress', {
       metadata: {
-        name: '${appName}-ingress',
+        name: `${appName}-ingress`,
         namespace: 'argo',
         annotations: {
           'nginx.ingress.kubernetes.io/backend-protocol': 'HTTP',
@@ -67,11 +67,11 @@ export class MyChart extends Chart {
             http: {
               paths: [
                 {
-                  path: '/${appName}(/|$)(.*)',
+                  path: `/${appName}(/|$)(.*)`,
                   pathType: 'Prefix',
                   backend: {
                     service: {
-                      name: '${appName}-service',
+                      name: `${appName}-service`,
                       port: { number: 8080 },
                     },
                   },
