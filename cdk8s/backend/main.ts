@@ -53,9 +53,9 @@ export class MyChart extends Chart {
         name: 'spring-ingress',
         namespace: 'argo',
         annotations: {
-          'nginx.ingress.kubernetes.io/backend-protocol': 'HTTPS',
+          'nginx.ingress.kubernetes.io/backend-protocol': 'HTTP',
           'nginx.ingress.kubernetes.io/force-ssl-redirect': 'true',
-          'nginx.ingress.kubernetes.io/rewrite-target': '/$2',
+          'nginx.ingress.kubernetes.io/rewrite-target': '/',
           'nginx.ingress.kubernetes.io/ssl-passthrough': 'true',
         },
       },
