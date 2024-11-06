@@ -1,4 +1,4 @@
-package site.yacht.backend.domain.deployment;
+package site.yacht.backend.domain.deployment.api.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
