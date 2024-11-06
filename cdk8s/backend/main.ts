@@ -1,6 +1,6 @@
 import { Construct } from 'constructs';
 import { App, Chart, ChartProps, YamlOutputType } from 'cdk8s';
-import {IntOrString, KubeDeployment, KubeService} from "./imports/k8s";
+import {IntOrString, KubeDeployment, KubeService, KubeIngress} from "./imports/k8s";
 // const yaml = require('js-yaml');
 // const fs = require('fs');
 
@@ -17,8 +17,8 @@ export class MyChart extends Chart {
         namespace: "argo"
       },
       spec: {
-        type: 'NodePort',
-        ports: [ { port: 8080, targetPort: IntOrString.fromNumber(8080), nodePort: 30007 } ],
+        type: 'ClusterIP',
+          ports: [{ port: 8080, targetPort: IntOrString.fromNumber(8080) }],
         selector: label
       }
     });
@@ -46,6 +46,40 @@ export class MyChart extends Chart {
           }
         }
       }
+    });
+      
+    new KubeIngress(this, 'ingress', {
+      metadata: {
+        name: 'spring-ingress',
+        namespace: 'argo',
+        annotations: {
+          'nginx.ingress.kubernetes.io/backend-protocol': 'HTTPS',
+          'nginx.ingress.kubernetes.io/force-ssl-redirect': 'true',
+          'nginx.ingress.kubernetes.io/rewrite-target': '/$2',
+          'nginx.ingress.kubernetes.io/ssl-passthrough': 'true',
+        },
+      },
+      spec: {
+        ingressClassName: 'nginx',
+        rules: [
+          {
+            http: {
+              paths: [
+                {
+                  path: '/spring(/|$)(.*)',
+                  pathType: 'Prefix',
+                  backend: {
+                    service: {
+                      name: 'spring-service',
+                      port: { number: 8080 },
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
     });
 
   }
