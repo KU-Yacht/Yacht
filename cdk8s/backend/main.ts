@@ -10,7 +10,7 @@ export class MyChart extends Chart {
 
     // define resources here
     const label = { app: 'hello-k8s' };
-    const appName = process.env.APP_NAME || 'default-app-name';
+    const appName = process.env.APP_NAME;
     const port = parseInt(process.env.PORT || "8080", 10); 
     const replicas = parseInt(process.env.REPLICAS || "1", 10); 
 
