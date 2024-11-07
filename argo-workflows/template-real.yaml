@@ -217,14 +217,6 @@ spec:
             value: "{{inputs.parameters.cpu}}"
           - name: MEMORY
             value: "{{inputs.parameters.memory}}"
-        script: |
-          echo "DOCKER_IMAGE: $DOCKER_IMAGE"
-          echo "PORT: $PORT"
-          echo "APP_NAME: $APP_NAME"
-          echo "REPLICAS: $REPLICAS"
-          echo "CPU: $CPU"
-          echo "MEMORY: $MEMORY"
-          synth
         volumeMounts:
           - mountPath: /work2
             name: work2
@@ -236,13 +228,13 @@ spec:
         parameters:
         - name: deployment-yaml
           valueFrom:
-            path: /work2/cdk8s/backend/dist/Deployment.spring-deployment.k8s.yaml
+            path: /work2/cdk8s/backend/dist/Deployment.{{inputs.parameters.app_name}}-deployment.k8s.yaml
         - name: service-yaml
           valueFrom:
-            path: /work2/cdk8s/backend/dist/Service.spring-service.k8s.yaml
+            path: /work2/cdk8s/backend/dist/Service.{{inputs.parameters.app_name}}-service.k8s.yaml
         - name: ingress-yaml
           valueFrom:
-            path: /work2/cdk8s/backend/dist/Ingress.spring-ingress.k8s.yaml
+            path: /work2/cdk8s/backend/dist/Ingress.{{inputs.parameters.app_name}}-ingress.k8s.yaml
     - name: deployment-yaml
       inputs:
         parameters:
