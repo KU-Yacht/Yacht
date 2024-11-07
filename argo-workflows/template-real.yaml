@@ -15,7 +15,7 @@ spec:
         value: yacht24/spring-test:v0.0.1
       - name: port
         value: 8090
-      - name: app_name
+      - name: appName
         value: spring
       - name: replicas
         value: 1
@@ -77,8 +77,8 @@ spec:
                   value: "{{workflow.parameters.image}}"
                 - name: port
                   value: "{{workflow.parameters.port}}"
-                - name: app_name
-                  value: "{{workflow.parameters.app_name}}"
+                - name: appName
+                  value: "{{workflow.parameters.appName}}"
                 - name: replicas
                   value: "{{workflow.parameters.replicas}}"
                 - name: cpu
@@ -199,7 +199,7 @@ spec:
         parameters:
           - name: image
           - name: port
-          - name: app_name
+          - name: appName
           - name: replicas
           - name: cpu
           - name: memory
@@ -210,7 +210,7 @@ spec:
           - name: PORT
             value: "{{inputs.parameters.port}}"
           - name: APP_NAME
-            value: "{{inputs.parameters.app_name}}"
+            value: "{{inputs.parameters.appName}}"
           - name: REPLICAS
             value: "{{inputs.parameters.replicas}}"
           - name: CPU
@@ -228,13 +228,13 @@ spec:
         parameters:
         - name: deployment-yaml
           valueFrom:
-            path: /work2/cdk8s/backend/dist/Deployment.{{inputs.parameters.app_name}}-deployment.k8s.yaml
+            path: /work2/cdk8s/backend/dist/Deployment.{{inputs.parameters.appName}}-deployment.k8s.yaml
         - name: service-yaml
           valueFrom:
-            path: /work2/cdk8s/backend/dist/Service.{{inputs.parameters.app_name}}-service.k8s.yaml
+            path: /work2/cdk8s/backend/dist/Service.{{inputs.parameters.appName}}-service.k8s.yaml
         - name: ingress-yaml
           valueFrom:
-            path: /work2/cdk8s/backend/dist/Ingress.{{inputs.parameters.app_name}}-ingress.k8s.yaml
+            path: /work2/cdk8s/backend/dist/Ingress.{{inputs.parameters.appName}}-ingress.k8s.yaml
     - name: deployment-yaml
       inputs:
         parameters:

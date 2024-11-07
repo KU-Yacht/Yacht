@@ -35,7 +35,7 @@ spec:
                     - name: path
                     - name: image
                     - name: port
-                    - name: app_name
+                    - name: appName
                     - name: replicas
                     - name: cpu
                     - name: memory
