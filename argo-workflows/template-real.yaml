@@ -117,6 +117,9 @@ spec:
                   value: "{{tasks.make-deploy-yaml.outputs.parameters.ingress-yaml}}"
             depends: "make-deploy-yaml && build-and-push"
     - name: init-history
+      inputs:
+        parameters:
+          - name: applicationId
       script:
         image: curlimages/curl:latest
         command: ["sh", "-c"]
