@@ -124,7 +124,7 @@ spec:
       container:
         image: curlimages/curl:latest
         command: ["sh", "-c"]
-        source: |
+        args: |
           curl -X POST https://yacht.ithinkso.site/api/histories \
           -H "Content-Type: application/json" \
           -d '{"applicationId": {{inputs.parameters.applicationId}}, "generatedYaml": "string",
