@@ -126,7 +126,7 @@ spec:
         source: |
           curl -X POST https://yacht.ithinkso.site/api/histories \
           -H "Content-Type: application/json" \
-          -d '{"applicationId": {{inputs.parameters.applicaionId}}, "generatedYaml": "string",
+          -d '{"applicationId": {{inputs.parameters.applicationId}}, "generatedYaml": "string",
                "commitId": "203d687b48760a309893b2c0239bf533f8d6e6be", "argoWorkflowId": "{{workflow.name}}"}'
     - name: clone-application
       inputs:
