@@ -121,7 +121,7 @@ spec:
       inputs:
         parameters:
           - name: applicationId
-      script:
+      container:
         image: curlimages/curl:latest
         command: ["sh", "-c"]
         source: |
