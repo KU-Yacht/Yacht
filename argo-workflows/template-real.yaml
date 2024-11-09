@@ -124,10 +124,11 @@ spec:
       container:
         image: curlimages/curl:latest
         command: ["sh", "-c"]
-        args: |
-          curl -X POST https://yacht.ithinkso.site/api/histories \
-          -H "Content-Type: application/json" \
-          -d '{"applicationId": {{inputs.parameters.applicationId}}, "generatedYaml": "string",
+        args: 
+          - |
+            curl -X POST https://yacht.ithinkso.site/api/histories \
+            -H "Content-Type: application/json" \
+            -d '{"applicationId": {{inputs.parameters.applicationId}}, "generatedYaml": "string",
                "commitId": "203d687b48760a309893b2c0239bf533f8d6e6be", "argoWorkflowId": "{{workflow.name}}"}'
       securityContext:
         runAsUser: 0
