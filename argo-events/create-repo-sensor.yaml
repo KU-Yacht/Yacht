@@ -39,6 +39,7 @@ spec:
                     - name: replicas
                     - name: cpu
                     - name: memory
+                    - name: applicationId
           parameters:
             - src:
                 dependencyName: create-repo-dep
@@ -76,3 +77,7 @@ spec:
                 dependencyName: create-repo-dep
                 dataKey: body.memory
               dest: spec.arguments.parameters.8.value
+            - src:
+                dependencyName: create-repo-dep
+                dataKey: body.applicationId
+              dest: spec.arguments.parameters.9.value

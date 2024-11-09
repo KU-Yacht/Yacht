@@ -23,6 +23,8 @@ spec:
         value: 0.2
       - name: memory
         value: 0.6
+      - name: applicationId
+        value: 1
   entrypoint: main
   volumeClaimTemplates:
     - metadata:
@@ -43,6 +45,12 @@ spec:
     - name: main
       dag:
         tasks:
+          - name: init-history
+            template: init-history
+            arguments:
+              parameters:
+                - name: applicationId
+                  value: "{{workflow.parameters.applicationId}}"
           - name: clone-application
             template: clone-application
             arguments:
@@ -51,6 +59,7 @@ spec:
                   value: "{{workflow.parameters.repo}}"
                 - name: branch
                   value: "{{workflow.parameters.branch}}"
+            depends: "init-history"
           - name: build-and-push
             template: build-and-push
             arguments:
@@ -107,6 +116,15 @@ spec:
                 - name: ingress-yaml
                   value: "{{tasks.make-deploy-yaml.outputs.parameters.ingress-yaml}}"
             depends: "make-deploy-yaml && build-and-push"
+    - name: init-history
+      script:
+        image: curlimages/curl:latest
+        command: ["sh", "-c"]
+        source: |
+          curl -X POST https://yacht.ithinkso.site/api/histories \
+          -H "Content-Type: application/json" \
+          -d '{"applicationId": {{inputs.parameters.applicaionId}}, "generatedYaml": "string",
+               "commitId": "203d687b48760a309893b2c0239bf533f8d6e6be", "argoWorkflowId": "{{workflow.name}}"}'
     - name: clone-application
       inputs:
         parameters:
