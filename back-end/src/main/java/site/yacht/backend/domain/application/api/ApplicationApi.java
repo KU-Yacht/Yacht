@@ -44,6 +44,9 @@ public class ApplicationApi {
                 .projectName(request.getProjectName())
                 .templateName(request.getTemplateName())
                 .replicaNumber(request.getReplicaNumber())
+                .path(request.getPath())
+                .image(request.getImage())
+                .branch(request.getBranch())
                 .build();
 
         applicationService.registerApplication(applicationRegisterDto);

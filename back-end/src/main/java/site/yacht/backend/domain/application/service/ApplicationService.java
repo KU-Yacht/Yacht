@@ -60,7 +60,11 @@ public class ApplicationService {
                 .cpu(applicationRegisterDto.cpu())
                 .port(applicationRegisterDto.port())
                 .memory(applicationRegisterDto.memory())
+                .path(applicationRegisterDto.path())
+                .image(applicationRegisterDto.image())
+                .branch(applicationRegisterDto.branch())
                 .build();
+
         applicationRepository.save(application);
     }
 

@@ -12,9 +12,12 @@ public record ApplicationRegisterDto(User user,
                                      Region region,
                                      String namespace,
                                      int replicaNumber,
-                                     int cpu,
+                                     double cpu,
                                      int memory,
                                      int port,
                                      String templateName,
-                                     String projectName) {
+                                     String projectName,
+                                     String path,
+                                     String branch,
+                                     String image) {
 }
