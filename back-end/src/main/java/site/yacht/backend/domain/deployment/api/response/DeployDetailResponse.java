@@ -15,7 +15,7 @@ public class DeployDetailResponse {
     private String gitUrl;
     private String namespace;
     private int replicaNumber;
-    private int cpu;
+    private double cpu;
     private int memory;
     private int port;
 
