@@ -89,7 +89,7 @@ public class ApplicationService {
             throw new AuthorizationException();
         }
 
-        DeploymentHistory deploymentHistory = deploymentHistoryRepository.findByApplication(application)
+        DeploymentHistory deploymentHistory = deploymentHistoryRepository.findTopByApplicationOrderByCreatedAtDesc(application)
                 .orElse(null);
 
         return new FindApplicationDetailResponse(application, deploymentHistory);
