@@ -12,7 +12,6 @@ import site.yacht.backend.domain.application.api.response.FindApplicationDetailR
 import site.yacht.backend.domain.application.domain.Region;
 import site.yacht.backend.domain.application.dto.ApplicationRegisterDto;
 import site.yacht.backend.domain.application.service.ApplicationService;
-import site.yacht.backend.global.error.exception.IllegalException;
 import site.yacht.backend.global.security.UserDetailsImpl;
 
 @RestController
@@ -29,7 +28,7 @@ public class ApplicationApi {
     public void registerApplication(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                     @RequestBody @Valid ApplicationRegisterRequest request) {
         Region region = Region.fromString(request.getRegion())
-                .orElseThrow(() -> new IllegalException("wrong region"));
+                .orElseThrow(() -> new IllegalArgumentException("wrong region"));
 
         ApplicationRegisterDto applicationRegisterDto = ApplicationRegisterDto.builder()
                 .region(region)

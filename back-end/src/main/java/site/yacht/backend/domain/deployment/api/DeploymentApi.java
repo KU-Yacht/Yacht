@@ -10,6 +10,7 @@ import site.yacht.backend.domain.application.domain.Application;
 import site.yacht.backend.domain.application.exception.ApplicationNotFoundException;
 import site.yacht.backend.domain.application.repository.ApplicationRepository;
 import site.yacht.backend.domain.deployment.api.response.DeployDetailResponse;
+import site.yacht.backend.domain.deployment.api.response.DeployResponse;
 import site.yacht.backend.domain.deployment.service.DeployService;
 import site.yacht.backend.global.security.UserDetailsImpl;
 
@@ -34,14 +35,9 @@ public class DeploymentApi {
 
     @PostMapping("/{applicationId}")
     @Operation(summary = "애플리케이션 배포하기", description = "애플리케이션을 배포합니다.")
-    public String deployApplication(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                    @PathVariable Long applicationId) {
-        boolean deploy = deployService.deploy(userDetails.user().getId(), applicationId);
-        if (deploy) {
-            return "{\"isSuccess\": true}";
-        }
-        else {
-            return "{\"isSuccess\": false}";
-        }
+    public DeployResponse deployApplication(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                            @PathVariable Long applicationId) {
+        boolean result = deployService.deploy(userDetails.user().getId(), applicationId);
+        return new DeployResponse(result);
     }
 }
