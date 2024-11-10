@@ -30,7 +30,7 @@ public class ApplicationRegisterRequest {
     private String description;
 
     @NotBlank(message = "git URL은 필수값입니다.")
-    @Schema(description = "GIT URL", example = "https://github.com/KU-Yacht/Yacht", requiredMode = RequiredMode.REQUIRED)
+    @Schema(description = "GIT URL", example = "https://github.com/KU-Yacht/spring-example", requiredMode = RequiredMode.REQUIRED)
     private String gitUrl;
 
     @NotBlank(message = "template은 필수값입니다.")
