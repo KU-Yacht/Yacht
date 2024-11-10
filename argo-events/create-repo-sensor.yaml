@@ -87,8 +87,7 @@ spec:
           url: "https://yacht.ithinkso.site/api/histories"
           method: "POST"
           headers:
-            - key: "Content-Type"
-              value: "application/json"
+            Content-Type: "application/json"
           payload:
             - src:
                 dependencyName: trigger-yacht-workflow
