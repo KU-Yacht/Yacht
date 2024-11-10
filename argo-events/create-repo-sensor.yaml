@@ -91,7 +91,7 @@ spec:
           payload:
             - src:
                 dependencyName: trigger-yacht-workflow
-                dataKey: "test"  
+                dataKey: body.repoUrl  
               dest: body.argoWorkflowId
             - src:
                 dependencyName: create-repo-dep
