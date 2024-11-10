@@ -3,6 +3,7 @@ kind: WorkflowTemplate
 metadata:
   name: yacht
 spec:
+  ttlSecondsAfterFinished: 600
   arguments:
     parameters:
       - name: repo
