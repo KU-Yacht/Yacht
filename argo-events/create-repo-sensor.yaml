@@ -90,13 +90,13 @@ spec:
             Content-Type: "application/json"
           payload:
             - src:
-                dependencyName: trigger-yacht-workflow
-                dataKey: body.repoUrl  
-              dest: body.argoWorkflowId
+                dependencyName: create-repo-dep
+                dataKey: body.applicationId
+              dest: argoWorkflowId
             - src:
                 dependencyName: create-repo-dep
                 dataKey: body.applicationId
-              dest: body.applicationId
+              dest: applicationId
           staticPayload:
             - key: generatedYaml
               value: "string"
