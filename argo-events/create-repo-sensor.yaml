@@ -81,3 +81,25 @@ spec:
                 dependencyName: create-repo-dep
                 dataKey: body.applicationId
               dest: spec.arguments.parameters.9.value
+    - template:
+        name: notify-backend
+        http:
+          url: "https://yacht.ithinkso.site/api/histories"
+          method: "POST"
+          headers:
+            - key: "Content-Type"
+              value: "application/json"
+          payload:
+            - src:
+                dependencyName: trigger-yacht-workflow
+                dataKey: metadata.name  
+              dest: body.argoWorkflowId
+            - src:
+                dependencyName: create-repo-dep
+                dataKey: body.applicationId
+              dest: body.applicationId
+          staticPayload:
+            - key: generatedYaml
+              value: "string"
+            - key: commitId
+              value: "203d687b48760a309893b2c0239bf533f8d6e6be"
