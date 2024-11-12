@@ -11,8 +11,7 @@ import site.yacht.backend.domain.application.api.request.ApplicationRegisterRequ
 import site.yacht.backend.domain.application.api.response.FindApplicationDetailResponse;
 import site.yacht.backend.domain.application.domain.Region;
 import site.yacht.backend.domain.application.dto.ApplicationRegisterDto;
-import site.yacht.backend.domain.application.service.ApplicationRegisterService;
-import site.yacht.backend.global.error.exception.IllegalException;
+import site.yacht.backend.domain.application.service.ApplicationService;
 import site.yacht.backend.global.security.UserDetailsImpl;
 
 @RestController
@@ -21,7 +20,7 @@ import site.yacht.backend.global.security.UserDetailsImpl;
 @Tag(name = "Application", description = "애플리케이션 API")
 public class ApplicationApi {
 
-    private final ApplicationRegisterService applicationRegisterService;
+    private final ApplicationService applicationService;
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
@@ -29,7 +28,7 @@ public class ApplicationApi {
     public void registerApplication(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                     @RequestBody @Valid ApplicationRegisterRequest request) {
         Region region = Region.fromString(request.getRegion())
-                .orElseThrow(() -> new IllegalException("wrong region"));
+                .orElseThrow(() -> new IllegalArgumentException("wrong region"));
 
         ApplicationRegisterDto applicationRegisterDto = ApplicationRegisterDto.builder()
                 .region(region)
@@ -44,16 +43,19 @@ public class ApplicationApi {
                 .projectName(request.getProjectName())
                 .templateName(request.getTemplateName())
                 .replicaNumber(request.getReplicaNumber())
+                .path(request.getPath())
+                .image(request.getImage())
+                .branch(request.getBranch())
                 .build();
 
-        applicationRegisterService.registerApplication(applicationRegisterDto);
+        applicationService.registerApplication(applicationRegisterDto);
     }
 
     @GetMapping("/{applicationId}")
     @Operation(summary = "애플리케이션 상세 정보 조회", description = "애플리케이션의 상세 정보를 조회합니다. 조회하는 사용자는 애플리케이션의 프로젝트에 속해있어야 합니다.")
     public FindApplicationDetailResponse findApplicationDetail(@PathVariable Long applicationId,
                                                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return applicationRegisterService.findApplicationDetail(userDetails.user().getId(), applicationId);
+        return applicationService.findApplicationDetail(userDetails.user().getId(), applicationId);
     }
 
 }

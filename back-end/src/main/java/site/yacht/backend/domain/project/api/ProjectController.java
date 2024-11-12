@@ -41,6 +41,7 @@ public class ProjectController {
     @PostMapping("{projectName}/invitation")
     @Operation(summary = "프로젝트 초대", description = "프로젝트에 사용자를 초대합니다. 초대한 사람은 프로젝트의 ADMIN 권한을 가져야 합니다. 초대된 유저는 VIEWER 권한을 가집니다.")
     public void inviteProject(@PathVariable String projectName, @RequestBody @Valid InviteProjectRequest request, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        System.out.println("projectName: " + projectName);
         projectService.inviteProject(userDetails.user().getId(), projectName, request.getEmails());
     }
 }

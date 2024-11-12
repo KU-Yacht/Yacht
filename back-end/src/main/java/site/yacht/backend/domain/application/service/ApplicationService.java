@@ -24,7 +24,7 @@ import site.yacht.backend.global.error.exception.AuthorizationException;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class ApplicationRegisterService {
+public class ApplicationService {
 
     private final ApplicationRepository applicationRepository;
     private final TemplateRepository templateRepository;
@@ -60,7 +60,11 @@ public class ApplicationRegisterService {
                 .cpu(applicationRegisterDto.cpu())
                 .port(applicationRegisterDto.port())
                 .memory(applicationRegisterDto.memory())
+                .path(applicationRegisterDto.path())
+                .image(applicationRegisterDto.image())
+                .branch(applicationRegisterDto.branch())
                 .build();
+
         applicationRepository.save(application);
     }
 
@@ -85,7 +89,8 @@ public class ApplicationRegisterService {
             throw new AuthorizationException();
         }
 
-        DeploymentHistory deploymentHistory = deploymentHistoryRepository.findByApplication(application).orElse(null);
+        DeploymentHistory deploymentHistory = deploymentHistoryRepository.findTopByApplicationOrderByCreatedAtDesc(application)
+                .orElse(null);
 
         return new FindApplicationDetailResponse(application, deploymentHistory);
     }

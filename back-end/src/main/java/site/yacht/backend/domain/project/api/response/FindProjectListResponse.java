@@ -27,7 +27,7 @@ public class FindProjectListResponse {
     public static FindProjectListResponse from(UserProjectInfoDto userProjectInfoDto) {
 
         List<ApplicationInfo> applicationInfoList = userProjectInfoDto.applications().stream()
-                .map(application -> new ApplicationInfo(application.getId(), application.getName()))
+                .map(application -> new ApplicationInfo(application.getId(), application.getName(), application.getDescription()))
                 .toList();
 
         return new FindProjectListResponse(
@@ -47,5 +47,8 @@ public class FindProjectListResponse {
 
         @Schema(description = "애플리케이션 이름", example = "myApplication", requiredMode = Schema.RequiredMode.REQUIRED)
         private String name;
+
+        @Schema(description = "애플리케이션 설명", example = "This is my first application", requiredMode = Schema.RequiredMode.REQUIRED)
+        private String description;
     }
 }

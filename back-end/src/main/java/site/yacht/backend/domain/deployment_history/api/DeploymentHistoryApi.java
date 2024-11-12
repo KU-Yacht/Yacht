@@ -22,9 +22,12 @@ public class DeploymentHistoryApi {
     @ResponseStatus(value = HttpStatus.CREATED)
     @Operation(summary = "배포 기록 저장", description = "배포 기록을 저장합니다.")
     public void saveDeploymentHistory(@RequestBody @Valid DeploymentHistorySaveRequest request) {
-
-        DeploymentHistorySaveDto deploymentHistorySaveDto = new DeploymentHistorySaveDto(request.getApplicationId(),
-                request.getGeneratedYaml(), request.getCommitId(), request.getArgoWorkflowId());
+        DeploymentHistorySaveDto deploymentHistorySaveDto = new DeploymentHistorySaveDto(
+                request.getApplicationId(),
+                request.getGeneratedYaml(),
+                request.getCommitId(),
+                request.getArgoWorkflowId()
+        );
 
         deploymentHistoryService.saveDeploymentHistory(deploymentHistorySaveDto);
     }

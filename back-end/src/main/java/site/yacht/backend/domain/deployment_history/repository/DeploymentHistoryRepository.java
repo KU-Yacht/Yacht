@@ -7,5 +7,5 @@ import site.yacht.backend.domain.deployment_history.domain.DeploymentHistory;
 import java.util.Optional;
 
 public interface DeploymentHistoryRepository extends JpaRepository<DeploymentHistory, Long> {
-    Optional<DeploymentHistory> findByApplication(Application application);
+    Optional<DeploymentHistory> findTopByApplicationOrderByCreatedAtDesc(Application application);
 }

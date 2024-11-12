@@ -55,13 +55,18 @@ public class Application extends BaseTimeEntity {
 
     @Column(nullable = false, name = "replica_number")
     private int replicaNumber;
-    private int cpu;
+    private double cpu;
     private int memory;
     private int port;
 
+    private String path;
+    private String branch;
+    private String image;
+
     @Builder
     public Application(Project project, User user, Template template, Region region, String valueYaml, String name,
-                       String description, String gitUrl, String namespace, int replicaNumber, int cpu, int memory, int port) {
+                       String description, String gitUrl, String namespace, int replicaNumber, double cpu, int memory,
+                       int port, String path, String branch, String image) {
         this.project = project;
         this.user = user;
         this.template = template;
@@ -75,5 +80,8 @@ public class Application extends BaseTimeEntity {
         this.cpu = cpu;
         this.memory = memory;
         this.port = port;
+        this.path = path;
+        this.branch = branch;
+        this.image = image;
     }
 }

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import site.yacht.backend.domain.application.domain.Application;
 import site.yacht.backend.domain.deployment_history.domain.DeploymentHistory;
 
@@ -23,7 +22,7 @@ public class FindApplicationDetailResponse {
     private String gitUrl;
     private String namespace;
     private int replicaNumber;
-    private int cpu;
+    private double cpu;
     private int memory;
     private int port;
 

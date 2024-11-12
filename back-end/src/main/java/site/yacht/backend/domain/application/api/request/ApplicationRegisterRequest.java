@@ -30,10 +30,10 @@ public class ApplicationRegisterRequest {
     private String description;
 
     @NotBlank(message = "git URL은 필수값입니다.")
-    @Schema(description = "GIT URL", example = "https://github.com/KU-Yacht/Yacht", requiredMode = RequiredMode.REQUIRED)
+    @Schema(description = "GIT URL", example = "https://github.com/KU-Yacht/spring-example", requiredMode = RequiredMode.REQUIRED)
     private String gitUrl;
 
-    @NotBlank(message = "git URL은 필수값입니다.")
+    @NotBlank(message = "template은 필수값입니다.")
     @Schema(description = "template 이름", example = "spring server template", requiredMode = RequiredMode.REQUIRED)
     private String templateName;
 
@@ -49,15 +49,26 @@ public class ApplicationRegisterRequest {
     @Schema(description = "replicaNumber", example = "1", minimum = "1", maximum = "10", requiredMode = RequiredMode.REQUIRED)
     private int replicaNumber;
 
-    @Range(min = 1, max = 10, message = "cpu는 1이상 10이하여야 합니다.")
-    @Schema(description = "cpu(core)", example = "1", minimum = "1", maximum = "10", requiredMode = RequiredMode.REQUIRED)
-    private int cpu;
+    @Schema(description = "cpu", example = "0.1", minimum = "0.1", maximum = "1.0", requiredMode = RequiredMode.REQUIRED)
+    private double cpu;
 
     @Range(min = 256, max = 164064, message = "memory는 256이상 164064이하여야 합니다.")
-    @Schema(description = "memory(MB)", example = "2048", minimum = "256", maximum = "164064", requiredMode = RequiredMode.REQUIRED)
+    @Schema(description = "memory(mi)", example = "2048", minimum = "256", maximum = "164064", requiredMode = RequiredMode.REQUIRED)
     private int memory;
 
     @Range(min = 1, max = 65535, message = "port는 1이상 65535이하여야 합니다.")
     @Schema(description = "port", example = "8080", minimum = "1", maximum = "65535", requiredMode = RequiredMode.REQUIRED)
     private int port;
+
+    @NotBlank(message = "path은 필수값입니다.")
+    @Schema(description = "도커파일이 위치한 위치", example = ".", requiredMode = Schema.RequiredMode.REQUIRED)
+    private String path;
+
+    @NotBlank(message = "branch은 필수값입니다.")
+    @Schema(description = "배포할 레포 브런치", example = "main", requiredMode = Schema.RequiredMode.REQUIRED)
+    private String branch;
+
+    @NotBlank(message = "image는 필수값입니다.")
+    @Schema(description = "image", example = "yacht24/new-test:v0.0.1", requiredMode = Schema.RequiredMode.REQUIRED)
+    private String image;
 }
