@@ -1,0 +1,284 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: yacht
+spec:
+  ttlSecondsAfterFinished: 600
+  arguments:
+    parameters:
+      - name: repo
+        value: https://github.com/KU-Yacht/spring-example
+      - name: branch
+        value: main
+      - name: path
+        value: .
+      - name: image
+        value: yacht24/spring-test:v0.0.1
+      - name: port
+        value: 8090
+      - name: appName
+        value: spring
+      - name: replicas
+        value: 1
+      - name: cpu
+        value: 0.2
+      - name: memory
+        value: 0.6
+      - name: applicationId
+        value: 1
+  entrypoint: main
+  volumeClaimTemplates:
+    - metadata:
+        name: work
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 128Mi
+    - metadata:
+        name: work2
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 64Mi
+  templates:
+    - name: main
+      dag:
+        tasks:
+          - name: init-history
+            template: init-history
+            arguments:
+              parameters:
+                - name: applicationId
+                  value: "{{workflow.parameters.applicationId}}"
+          - name: clone-application
+            template: clone-application
+            arguments:
+              parameters:
+                - name: repo
+                  value: "{{workflow.parameters.repo}}"
+                - name: branch
+                  value: "{{workflow.parameters.branch}}"
+            depends: "init-history"
+          - name: build-and-push
+            template: build-and-push
+            arguments:
+              parameters:
+                - name: path
+                  value: "{{workflow.parameters.path}}"
+                - name: image
+                  value: "{{workflow.parameters.image}}"
+            depends: "clone-application"
+          - name: clone-cdk8s
+            template: clone-cdk8s
+            arguments:
+              parameters:
+                - name: repo
+                  value: "{{workflow.parameters.repo}}"
+            depends: "init-history"
+          - name: setup-node
+            template: setup-node
+            depends: "clone-cdk8s"
+          - name: make-deploy-yaml
+            template: make-deploy-yaml
+            arguments:
+              parameters:
+                - name: image
+                  value: "{{workflow.parameters.image}}"
+                - name: port
+                  value: "{{workflow.parameters.port}}"
+                - name: appName
+                  value: "{{workflow.parameters.appName}}"
+                - name: replicas
+                  value: "{{workflow.parameters.replicas}}"
+                - name: cpu
+                  value: "{{workflow.parameters.cpu}}"
+                - name: memory
+                  value: "{{workflow.parameters.memory}}"                                                             
+            depends: "setup-node"
+          - name: deployment-yaml
+            template: deployment-yaml
+            arguments:
+              parameters:
+              - name: deployment-yaml
+                value: "{{tasks.make-deploy-yaml.outputs.parameters.deployment-yaml}}"
+            depends: "make-deploy-yaml && build-and-push"
+          - name: service-yaml
+            template: service-yaml
+            arguments:
+              parameters:
+                - name: service-yaml
+                  value: "{{tasks.make-deploy-yaml.outputs.parameters.service-yaml}}"
+            depends: "make-deploy-yaml && build-and-push"
+          - name: ingress-yaml
+            template: ingress-yaml
+            arguments:
+              parameters:
+                - name: ingress-yaml
+                  value: "{{tasks.make-deploy-yaml.outputs.parameters.ingress-yaml}}"
+            depends: "make-deploy-yaml && build-and-push"
+    - name: init-history
+      inputs:
+        parameters:
+          - name: applicationId
+      container:
+        image: curlimages/curl:latest
+        command: ["sh", "-c"]
+        args: 
+          - |
+            curl -X POST https://yacht.ithinkso.site/api/histories \
+            -H "Content-Type: application/json" \
+            -d '{"applicationId": {{inputs.parameters.applicationId}}, "generatedYaml": "string",
+               "commitId": "203d687b48760a309893b2c0239bf533f8d6e6be", "argoWorkflowId": "{{workflow.name}}"}'
+      securityContext:
+        runAsUser: 0
+    - name: clone-application
+      inputs:
+        parameters:
+          - name: repo
+          - name: branch
+      container:
+        volumeMounts:
+          - mountPath: /work
+            name: work
+        image: alpine/git:v2.26.2
+        workingDir: /work
+        args:
+          - clone
+          - --depth
+          - "1"
+          - --branch
+          - "{{inputs.parameters.branch}}"
+          - --single-branch
+          - "{{inputs.parameters.repo}}"
+          - .
+    - name: build-and-push
+      inputs:
+        parameters:
+          - name: path
+          - name: image
+      volumes:
+        - name: docker-config
+          secret:
+            secretName: docker-config
+      container:
+        readinessProbe:
+          exec:
+            command: [ sh, -c, "buildctl debug workers" ]
+        image: moby/buildkit:v0.9.3-rootless
+        volumeMounts:
+          - name: work
+            mountPath: /work
+          - name: docker-config
+            mountPath: /.docker
+        workingDir: /work/{{inputs.parameters.path}}
+        env:
+          - name: BUILDKITD_FLAGS
+            value: --oci-worker-no-process-sandbox
+          - name: DOCKER_CONFIG
+            value: /.docker
+        command:
+          - buildctl-daemonless.sh
+        args:
+          - build
+          - --frontend
+          - dockerfile.v0
+          - --local
+          - context=.
+          - --local
+          - dockerfile=.
+          - --output
+          - type=image,name=docker.io/{{inputs.parameters.image}},push=true
+        securityContext:
+          privileged: true
+    - name: clone-cdk8s
+      inputs:
+        parameters:
+          - name: repo
+      container:
+        volumeMounts:
+          - mountPath: /work2
+            name: work2
+        image: alpine/git:v2.26.2
+        workingDir: /work2
+        args:
+          - clone
+          - --depth
+          - "1"
+          - --branch
+          - "main"
+          - --single-branch
+          - "https://github.com/KU-Yacht/Yacht"
+          - .
+    - name: setup-node
+      container:
+        volumeMounts:
+          - mountPath: /work2
+            name: work2
+        workingDir: /work2/cdk8s/backend
+        image: node:latest
+        command: [ sh, -c ]
+        args: [ "npm install" ]
+    - name: make-deploy-yaml
+      inputs:
+        parameters:
+          - name: image
+          - name: port
+          - name: appName
+          - name: replicas
+          - name: cpu
+          - name: memory
+      container:
+        env:
+          - name: DOCKER_IMAGE
+            value: "{{inputs.parameters.image}}"
+          - name: PORT
+            value: "{{inputs.parameters.port}}"
+          - name: APP_NAME
+            value: "{{inputs.parameters.appName}}"
+          - name: REPLICAS
+            value: "{{inputs.parameters.replicas}}"
+          - name: CPU
+            value: "{{inputs.parameters.cpu}}"
+          - name: MEMORY
+            value: "{{inputs.parameters.memory}}"
+        volumeMounts:
+          - mountPath: /work2
+            name: work2
+        workingDir: /work2/cdk8s/backend
+        image: brennerm/cdk8s:latest
+        args:
+          - synth
+      outputs:
+        parameters:
+        - name: deployment-yaml
+          valueFrom:
+            path: /work2/cdk8s/backend/dist/Deployment.{{inputs.parameters.appName}}-deployment.k8s.yaml
+        - name: service-yaml
+          valueFrom:
+            path: /work2/cdk8s/backend/dist/Service.{{inputs.parameters.appName}}-service.k8s.yaml
+        - name: ingress-yaml
+          valueFrom:
+            path: /work2/cdk8s/backend/dist/Ingress.{{inputs.parameters.appName}}-ingress.k8s.yaml
+    - name: deployment-yaml
+      inputs:
+        parameters:
+        - name: deployment-yaml
+      resource:
+        action: apply
+        manifest: "{{inputs.parameters.deployment-yaml}}"
+    - name: service-yaml
+      inputs:
+        parameters:
+          - name: service-yaml
+      resource:
+        action: apply
+        manifest: "{{inputs.parameters.service-yaml}}"
+    - name: ingress-yaml
+      inputs:
+        parameters:
+          - name: ingress-yaml
+      resource:
+        action: apply
+        manifest: "{{inputs.parameters.ingress-yaml}}"

@@ -1,0 +1,83 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: create-repo-sensor
+  namespace: argo-events
+spec:
+  template:
+    serviceAccountName: argo-events
+  eventBusName: eventbus
+  dependencies:
+    - name: create-repo-dep
+      eventSourceName: create-repo-eventsource
+      eventName: create-repo-post
+  triggers:
+    - template:
+        name: trigger-yacht-workflow
+        argoWorkflow:
+          group: argoproj.io
+          version: v1alpha1
+          namespace: argo
+          operation: submit
+          source:
+            resource:
+              apiVersion: argoproj.io/v1alpha1
+              kind: Workflow
+              metadata:
+                generateName: yacht-workflow-
+              spec:
+                workflowTemplateRef:
+                  name: yacht
+                arguments:
+                  parameters:
+                    - name: repo
+                    - name: branch
+                    - name: path
+                    - name: image
+                    - name: port
+                    - name: appName
+                    - name: replicas
+                    - name: cpu
+                    - name: memory
+                    - name: applicationId
+          parameters:
+            - src:
+                dependencyName: create-repo-dep
+                dataKey: body.repoUrl
+              dest: spec.arguments.parameters.0.value
+            - src:
+                dependencyName: create-repo-dep
+                dataKey: body.branch
+              dest: spec.arguments.parameters.1.value  
+            - src:
+                dependencyName: create-repo-dep
+                dataKey: body.path
+              dest: spec.arguments.parameters.2.value
+            - src:
+                dependencyName: create-repo-dep
+                dataKey: body.image
+              dest: spec.arguments.parameters.3.value
+            - src:
+                dependencyName: create-repo-dep
+                dataKey: body.port
+              dest: spec.arguments.parameters.4.value
+            - src:
+                dependencyName: create-repo-dep
+                dataKey: body.appName
+              dest: spec.arguments.parameters.5.value
+            - src:
+                dependencyName: create-repo-dep
+                dataKey: body.replicas
+              dest: spec.arguments.parameters.6.value
+            - src:
+                dependencyName: create-repo-dep
+                dataKey: body.cpu
+              dest: spec.arguments.parameters.7.value
+            - src:
+                dependencyName: create-repo-dep
+                dataKey: body.memory
+              dest: spec.arguments.parameters.8.value
+            - src:
+                dependencyName: create-repo-dep
+                dataKey: body.applicationId
+              dest: spec.arguments.parameters.9.value

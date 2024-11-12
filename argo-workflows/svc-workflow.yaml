@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-workflow
+  namespace: argo
+spec:
+  type: ClusterIP
+  selector:
+    app: argo-workflow
+  ports:
+    - protocol: TCP
+      port: 2746
+      targetPort: 2746

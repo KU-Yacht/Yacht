@@ -1,0 +1,14 @@
+apiVersion: argoproj.io/v1alpha1
+kind: EventSource
+metadata:
+  name: create-repo-eventsource
+  namespace: argo-events
+  labels:
+    eventsource-name: create-repo-eventsource  # 서비스 셀렉터와 일치하는 라벨 추가
+spec:
+  eventBusName: eventbus
+  webhook:
+    create-repo-post:
+      endpoint: /create-repo
+      method: POST
+      port: "12000"

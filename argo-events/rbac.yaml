@@ -1,0 +1,88 @@
+# servieaccount
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: argo-events
+  namespace: argo-events
+---  
+# clusterrole
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: argo-events
+rules:
+- apiGroups:
+  - argoproj.io
+  resources:
+  - cronworkflows
+  - cronworkflows/finalizers
+  - workflowtemplates
+  - workflows
+  verbs:
+  - create
+  - get
+  - list
+  - watch
+  - update
+  - patch
+  - delete
+- apiGroups: [""]
+  resources:
+  - pods
+  - services 
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups: ["apps"]  
+  resources:
+  - deployments       
+  verbs:              
+  - get
+  - create
+  - update
+  - delete
+  - patch
+- apiGroups: ["networking.k8s.io"]
+  resources:
+    - ingresses
+  verbs:
+    - get
+    - list
+    - watch
+    - create
+    - update
+    - patch
+    - delete
+- apiGroups: ["argoproj.io"]
+  resources:
+    - workflowtaskresults
+  verbs:
+    - get
+    - list
+    - watch
+    - create
+    - update
+    - patch
+    - delete
+---  
+# clusterrolebinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: argo-events
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: argo-events
+subjects:
+- kind: ServiceAccount
+  name: argo-events
+  namespace: argo-events
+- kind: ServiceAccount
+  name: default      
+  namespace: argo-events
